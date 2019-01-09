@@ -63,7 +63,6 @@ N.rec_on b
 theorem distr (a b c : N) : mult a (plus b c) = plus (mult a b) (mult a c) :=
 N.rec_on a 
     (show mult z (plus b c) = plus (mult z b) (mult z c), by rw [zero_mult, zero_mult, zero_mult, zero_plus])
-    -- (show mult (s a) (plus b c) = plus (mult a (plus b c)) (plus b c), by rw [succ_mult])
     (assume a,
         assume ih : mult a (plus b c) = plus (mult a b) (mult a c),
         show mult (s a) (plus b c) = plus (mult (s a) b) (mult (s a) c), from calc  
