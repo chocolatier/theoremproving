@@ -13,13 +13,13 @@ variable [decidable_eq α]
 variable [unique_factorization_domain α]
 variable [has_mod α]
 
--- 
-theorem has_R_root_imp_has_frac_R_root (p : polynomial α) : (p = p) := sorry
+-- -- 
+-- theorem has_R_root_imp_has_frac_R_root (p : polynomial α) : (p = p) := sorry
 
-def has_non_unit_divisor (a : α) : Prop := ∃(b : α), (¬is_unit b) ∧ (b ∣ a)
+-- def has_non_unit_divisor (a : α) : Prop := ∃(b : α), (¬is_unit b) ∧ (b ∣ a)
 
-lemma non_unit_div_ab_imp_non_unit_div_a_or_non_unit_div_b (a b : α) : ∃(c : α), 
-    (¬is_unit c) ∧ (c ∣ (a * b)) → (has_non_unit_divisor a) ∨ (has_non_unit_divisor b) := sorry
+-- lemma non_unit_div_ab_imp_non_unit_div_a_or_non_unit_div_b (a b : α) : ∃(c : α), 
+--     (¬is_unit c) ∧ (c ∣ (a * b)) → (has_non_unit_divisor a) ∨ (has_non_unit_divisor b) := sorry
 
 -- def primitive (p : polynomial α) : Prop :=
 -- ¬(∃(a : α), ∃(r : polynomial α), (¬is_unit a) ∧ p = (C a) * r)
@@ -29,6 +29,10 @@ def is_const (p : polynomial α) : Prop := degree p = 0
 instance is_const.decidable : decidable (is_const p) :=
 by unfold is_const; apply_instance
 
+lemma const_mod_decreasing (h: is_const q) :
+    degree (p - C (leading_coeff p) * X^(nat_degree p)) < degree p := sorry 
+
+    
 def mod_by_const : Π (p : polynomial α) {q : polynomial α},
   is_const q → polynomial α
 | p := λ q hq, 
@@ -44,12 +48,6 @@ def mod_by_const : Π (p : polynomial α) {q : polynomial α},
     else 
         p 
     
-
-
-lemma mod_well_founded ()
-
--- def mod_by_const (p q : polynomial α) : polynomial α := 
--- if hq : is_const q then (div_mod_by_const_aux p hq).2 else p 
 
 -- def non_primitive (p : polynomial α) : Prop :=
 -- ∃(a : α), 
