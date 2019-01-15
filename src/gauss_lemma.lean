@@ -13,17 +13,6 @@ variable [decidable_eq α]
 variable [unique_factorization_domain α]
 variable [has_mod α]
 
--- -- 
--- theorem has_R_root_imp_has_frac_R_root (p : polynomial α) : (p = p) := sorry
-
--- def has_non_unit_divisor (a : α) : Prop := ∃(b : α), (¬is_unit b) ∧ (b ∣ a)
-
--- lemma non_unit_div_ab_imp_non_unit_div_a_or_non_unit_div_b (a b : α) : ∃(c : α), 
---     (¬is_unit c) ∧ (c ∣ (a * b)) → (has_non_unit_divisor a) ∨ (has_non_unit_divisor b) := sorry
-
--- def primitive (p : polynomial α) : Prop :=
--- ¬(∃(a : α), ∃(r : polynomial α), (¬is_unit a) ∧ p = (C a) * r)
-
 def is_const (p : polynomial α) : Prop := nat_degree p = 0 
 
 instance is_const.decidable : decidable (is_const p) :=
@@ -34,7 +23,12 @@ def leading_coeff_non_unit (p : polynomial α) : Prop := ¬is_unit (leading_coef
 def non_unit_const (p : polynomial α) : Prop := (is_const p) ∧ (leading_coeff_non_unit p)
 
 lemma const_mod_decreasing (hp: ¬is_const p) (h: is_const q) :
-    nat_degree (p - C (leading_coeff p) * X^(nat_degree p)) < nat_degree p := sorry
+    nat_degree (p - C (leading_coeff p) * X^(nat_degree p)) < nat_degree p := 
+    have h1 : p ≠ 0, by sorry,
+    have h2 : (leading_coeff p) = leading_coeff  (C (leading_coeff p) * X^(nat_degree p)), by simp,
+    have h3 : (degree p) = (degree (C (leading_coeff p) * X^(nat_degree p))), by sorry,
+    have h4 : _ := degree_sub_lt h3 h1 h2,    
+    by sorry
 
 def mod_by_const : Π (p : polynomial α) {q : polynomial α},
   is_const q → polynomial α
@@ -57,4 +51,9 @@ def mod_by_non_unit_const : Π (p : polynomial α) {q : polynomial α},
     have hc : is_const q := and.left hq,
     mod_by_const p hc
 
+def const_divisor : Π (p : polynomial α) (q : polynomial α), is_const q → Prop 
+| p q := λ hq,
+    mod_by_const p hq = 0
+
+def primitive (p : polynomial α) : Prop
 
