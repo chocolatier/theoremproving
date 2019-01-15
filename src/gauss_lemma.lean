@@ -49,3 +49,12 @@ def mod_by_const : Π (p : polynomial α) {q : polynomial α},
                 else
                     z
 using_well_founded {rel_tac := λ _ _, `[exact ⟨_, measure_wf nat_degree⟩]}
+
+-- pulls out the is_const and applies mod.
+def mod_by_non_unit_const : Π (p : polynomial α) {q : polynomial α},
+  non_unit_const q → polynomial α
+| p := λ q hq,
+    have hc : is_const q := and.left hq,
+    mod_by_const p hc
+
+
