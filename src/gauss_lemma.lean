@@ -4,7 +4,7 @@ import ring_theory.unique_factorization_domain
 open polynomial
 open classical
 
-universes u 
+universe u 
 
 variables {α : Type u} {a: α} 
 
@@ -24,44 +24,28 @@ variable [has_mod α]
 -- def primitive (p : polynomial α) : Prop :=
 -- ¬(∃(a : α), ∃(r : polynomial α), (¬is_unit a) ∧ p = (C a) * r)
 
-def is_const (p : polynomial α) : Prop := degree p = 0 
+def is_const (p : polynomial α) : Prop := nat_degree p = 0 
 
 instance is_const.decidable : decidable (is_const p) :=
 by unfold is_const; apply_instance
 
-lemma const_mod_decreasing (h: is_const q) :
-    degree (p - C (leading_coeff p) * X^(nat_degree p)) < degree p := sorry 
+def leading_coeff_non_unit (p : polynomial α) : Prop := ¬is_unit (leading_coeff p) 
 
-    
+def non_unit_const (p : polynomial α) : Prop := (is_const p) ∧ (leading_coeff_non_unit p)
+
+lemma const_mod_decreasing (hp: ¬is_const p) (h: is_const q) :
+    nat_degree (p - C (leading_coeff p) * X^(nat_degree p)) < nat_degree p := sorry
+
 def mod_by_const : Π (p : polynomial α) {q : polynomial α},
   is_const q → polynomial α
-| p := λ q hq, 
-    if h: is_const q then 
-        let 
-            z := C ((leading_coeff p) % (leading_coeff q)) * X^(nat_degree p),
-            rem := p - C (leading_coeff p) * X^(nat_degree p)
-                in 
-                    if h2: (nat_degree p = 0) then 
-                        z 
-                    else 
-                        z + (mod_by_const rem hq)
-    else 
-        p 
-    
-
--- def non_primitive (p : polynomial α) : Prop :=
--- ∃(a : α), 
-
--- lemma not_prim_imp_factors (p : polynomial α) [¬primitive p] : ∃(a : α), ()
-
--- lemma prod_of_prim_is_prim (p q : polynomial α) [primitive p] [primitive q] : primitive (p * q) :=
--- by_contradiction
---     (assume ch : ¬(primitive (p * q)),
---         have ch2 : ¬¬(∃(a : α), ∃(r : polynomial α), (¬is_unit a) ∧ (p * q = C a * r)), from ch,
---         have ch2_5 : (∃(a : α), ∃(r : polynomial α), (¬is_unit a) ∧ (p * q = C a * r)), from sorry, -- double not elim on ch2
---         have ch3 : leading_coeff (p * q) = (leading_coeff p) * (leading_coeff q), by simp,
---         have ch4 :  (has_non_unit_divisor (leading_coeff p)) ∨ (has_non_unit_divisor (leading_coeff p)), by sorry,
-        
---         show false, from sorry)
-
-
+| p := λ q hq,
+    let
+        z := C ((leading_coeff p) % (leading_coeff q)) * X^(nat_degree p),
+        rem := p - C (leading_coeff p) * X^(nat_degree p)
+            in
+                if hp: ¬is_const p then
+                    have wf : _ := const_mod_decreasing hp hq, 
+                    z + (mod_by_const rem hq)
+                else
+                    z
+using_well_founded {rel_tac := λ _ _, `[exact ⟨_, measure_wf nat_degree⟩]}
