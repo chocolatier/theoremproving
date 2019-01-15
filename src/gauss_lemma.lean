@@ -24,7 +24,7 @@ def non_unit_const (p : polynomial α) : Prop := (is_const p) ∧ (leading_coeff
 
 lemma const_mod_decreasing (hp: ¬is_const p) (h: is_const q) :
     nat_degree (p - C (leading_coeff p) * X^(nat_degree p)) < nat_degree p := 
-    have h1 : p ≠ 0, by sorry,
+    have h1 : p ≠ 0, by sorry, 
     have h2 : (leading_coeff p) = leading_coeff  (C (leading_coeff p) * X^(nat_degree p)), by simp,
     have h3 : (degree p) = (degree (C (leading_coeff p) * X^(nat_degree p))), by sorry,
     have h4 : _ := degree_sub_lt h3 h1 h2,    
@@ -54,4 +54,6 @@ def mod_by_non_unit_const : Π (p : polynomial α) {q : polynomial α},
 def const_divisor : Π (p : polynomial α) (q : polynomial α), is_const q → Prop 
 | p q := λ hq,
     mod_by_const p hq = 0
+
+def primitive (p : polynomial α) {q : polynomial α} : non_unit_const q → Prop := λ hq, ¬(const_divisor p q (and.left hq))
 
