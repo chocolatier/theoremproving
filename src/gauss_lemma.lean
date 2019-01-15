@@ -55,5 +55,3 @@ def const_divisor : Π (p : polynomial α) (q : polynomial α), is_const q → P
 | p q := λ hq,
     mod_by_const p hq = 0
 
-def primitive (p : polynomial α) : Prop
-
