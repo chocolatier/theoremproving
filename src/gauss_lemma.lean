@@ -22,7 +22,7 @@ def leading_coeff_non_unit (p : polynomial α) : Prop := ¬is_unit (leading_coef
 
 def non_unit_const (p : polynomial α) : Prop := (is_const p) ∧ (leading_coeff_non_unit p)
 
-lemma const_mod_decreasing (hp: ¬is_const p) (h: is_const q) :
+lemma const_mod_decreasing (hp: ¬is_const p) :
     nat_degree (p - C (leading_coeff p) * X^(nat_degree p)) < nat_degree p := 
     have h1 : p ≠ 0, by sorry, 
     have h2 : (leading_coeff p) = leading_coeff  (C (leading_coeff p) * X^(nat_degree p)), by simp,
@@ -38,7 +38,7 @@ def mod_by_const : Π (p : polynomial α) {q : polynomial α},
         rem := p - C (leading_coeff p) * X^(nat_degree p)
             in
                 if hp: ¬is_const p then
-                    have wf : _ := const_mod_decreasing hp hq, 
+                    have wf : _ := const_mod_decreasing hp, 
                     z + (mod_by_const rem hq)
                 else
                     z
@@ -57,3 +57,4 @@ def const_divisor : Π (p : polynomial α) (q : polynomial α), is_const q → P
 
 def primitive (p : polynomial α) {q : polynomial α} : non_unit_const q → Prop := λ hq, ¬(const_divisor p q (and.left hq))
 
+lemma prod_prim_is_prim (p : polynomial α) (q : polynomial α) : (primitive p _ _) ∧ (primitive q _ _) → primitive (p * q)
