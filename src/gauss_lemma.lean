@@ -20,7 +20,7 @@ by unfold is_const; apply_instance
 
 def leading_coeff_non_unit (p : polynomial α) : Prop := ¬is_unit (leading_coeff p) 
 
-instance is_unit.decidable : decidable (is_unit a) := sorry
+instance is_unit.decidable : decidable (is_unit a) := by unfold is_unit; apply_instance
 
 instance leading_coeff_non_unit.decidable : decidable (leading_coeff_non_unit p) :=
 by unfold leading_coeff_non_unit; apply_instance
@@ -64,5 +64,7 @@ def const_divisor : Π (p : polynomial α) (q : polynomial α), is_const q → P
 | p q := λ hq,
     mod_by_const p hq = 0
 
-def primitive (p : polynomial α) : Prop := ∀(q : polynomial α) (hq: non_unit_const q), (mod_by_non_unit_const p hq  = 0)
+def primitive (p : polynomial α) : Prop := ∀(q : polynomial α) (hq: non_unit_const q), ¬(mod_by_non_unit_const p hq  = 0)
 
+lemma prod_prim_is_prim {p q : polynomial α} (hp : primitive p) (hq : primitive q) : primitive (p * q) := 
+by contradiction,
