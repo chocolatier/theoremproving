@@ -20,7 +20,16 @@ by unfold is_const; apply_instance
 
 def leading_coeff_non_unit (p : polynomial α) : Prop := ¬is_unit (leading_coeff p) 
 
+instance is_unit.decidable : decidable (is_unit a) := sorry
+
+instance leading_coeff_non_unit.decidable : decidable (leading_coeff_non_unit p) :=
+by unfold leading_coeff_non_unit; apply_instance
+
 def non_unit_const (p : polynomial α) : Prop := (is_const p) ∧ (leading_coeff_non_unit p)
+
+instance non_unit_const.decidable : decidable (non_unit_const p) :=
+by unfold non_unit_const; apply_instance
+
 
 lemma const_mod_decreasing (hp: ¬is_const p) :
     nat_degree (p - C (leading_coeff p) * X^(nat_degree p)) < nat_degree p := 
@@ -54,3 +63,6 @@ def mod_by_non_unit_const : Π (p : polynomial α) {q : polynomial α},
 def const_divisor : Π (p : polynomial α) (q : polynomial α), is_const q → Prop 
 | p q := λ hq,
     mod_by_const p hq = 0
+
+def primitive (p : polynomial α) : Prop := ∀(q : polynomial α) (hq: non_unit_const q), (mod_by_non_unit_const p hq  = 0)
+
