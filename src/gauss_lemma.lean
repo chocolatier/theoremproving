@@ -13,22 +13,24 @@ variable [decidable_eq α]
 variable [unique_factorization_domain α]
 variable [has_mod α]
 
+local attribute [instance] prop_decidable
+
 def is_const (p : polynomial α) : Prop := nat_degree p = 0 
 
-instance is_const.decidable : decidable (is_const p) :=
-by unfold is_const; apply_instance
+-- instance is_const.decidable : decidable (is_const p) :=
+-- by unfold is_const; apply_instance
 
 def leading_coeff_non_unit (p : polynomial α) : Prop := ¬is_unit (leading_coeff p) 
 
-instance is_unit.decidable : decidable (is_unit a) := sorry
+-- instance is_unit.decidable : decidable (is_unit a) := sorry
 
-instance leading_coeff_non_unit.decidable : decidable (leading_coeff_non_unit p) :=
-by unfold leading_coeff_non_unit; apply_instance
+-- instance leading_coeff_non_unit.decidable : decidable (leading_coeff_non_unit p) :=
+-- by unfold leading_coeff_non_unit; apply_instance
 
 def non_unit_const (p : polynomial α) : Prop := (is_const p) ∧ (leading_coeff_non_unit p)
 
-instance non_unit_const.decidable : decidable (non_unit_const p) :=
-by unfold non_unit_const; apply_instance
+-- instance non_unit_const.decidable : decidable (non_unit_const p) :=
+-- by unfold non_unit_const; apply_instance
 
 
 lemma const_mod_decreasing (hp: ¬is_const p) :
