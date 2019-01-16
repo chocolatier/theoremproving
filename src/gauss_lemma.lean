@@ -20,7 +20,7 @@ by unfold is_const; apply_instance
 
 def leading_coeff_non_unit (p : polynomial α) : Prop := ¬is_unit (leading_coeff p) 
 
-instance is_unit.decidable : decidable (is_unit a) := by unfold is_unit; apply_instance
+instance is_unit.decidable : decidable (is_unit a) := sorry
 
 instance leading_coeff_non_unit.decidable : decidable (leading_coeff_non_unit p) :=
 by unfold leading_coeff_non_unit; apply_instance
@@ -64,7 +64,18 @@ def const_divisor : Π (p : polynomial α) (q : polynomial α), is_const q → P
 | p q := λ hq,
     mod_by_const p hq = 0
 
-def primitive (p : polynomial α) : Prop := ∀(q : polynomial α) (hq: non_unit_const q), ¬(mod_by_non_unit_const p hq  = 0)
+-- Maybe better off using GCD coefft = 1? Have UFD α so can produce GCD Domain α...
+def primitive (p : polynomial α) : Prop := ∀(q : polynomial α) (hq: non_unit_const q), (mod_by_non_unit_const p hq ≠ 0)
 
-lemma prod_prim_is_prim {p q : polynomial α} (hp : primitive p) (hq : primitive q) : primitive (p * q) := 
-by contradiction,
+instance primitive.decidable : decidable (primitive p) := sorry
+
+lemma prod_of_prim_is_prim (p q : polynomial α) : (primitive p ∧ primitive q) → primitive (p * q) := 
+begin 
+    intros h_p_q, 
+    by_contradiction h_pq, 
+    have hp : primitive p := and.left h_p_q,
+    have hq : primitive q := and.right h_p_q,
+    have h_div : ∃(m : polynomial α) (hm : non_unit_const m), mod_by_non_unit_const (p * q) hm = 0, by sorry,
+    have h_irred_div : ∃(n : polynomial α) (hn : non_unit_const n), (irreducible n), by sorry,
+
+end
