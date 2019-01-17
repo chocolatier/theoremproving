@@ -13,24 +13,24 @@ variable [decidable_eq α]
 variable [unique_factorization_domain α]
 variable [has_mod α]
 
-local attribute [instance] prop_decidable
+-- local attribute [instance] prop_decidable
 
 def is_const (p : polynomial α) : Prop := nat_degree p = 0 
 
--- instance is_const.decidable : decidable (is_const p) :=
--- by unfold is_const; apply_instance
+instance is_const.decidable : decidable (is_const p) :=
+by unfold is_const; apply_instance
 
 def leading_coeff_non_unit (p : polynomial α) : Prop := ¬is_unit (leading_coeff p) 
 
--- instance is_unit.decidable : decidable (is_unit a) := sorry
+instance is_unit.decidable : decidable (is_unit a) := sorry
 
--- instance leading_coeff_non_unit.decidable : decidable (leading_coeff_non_unit p) :=
--- by unfold leading_coeff_non_unit; apply_instance
+instance leading_coeff_non_unit.decidable : decidable (leading_coeff_non_unit p) :=
+by unfold leading_coeff_non_unit; apply_instance
 
 def non_unit_const (p : polynomial α) : Prop := (is_const p) ∧ (leading_coeff_non_unit p)
 
--- instance non_unit_const.decidable : decidable (non_unit_const p) :=
--- by unfold non_unit_const; apply_instance
+instance non_unit_const.decidable : decidable (non_unit_const p) :=
+by unfold non_unit_const; apply_instance
 
 
 lemma const_mod_decreasing (hp: ¬is_const p) :
@@ -69,7 +69,7 @@ def const_divisor : Π (p : polynomial α) {q : polynomial α}, is_const q → P
 -- Maybe better off using GCD coefft = 1? Have UFD α so can produce GCD Domain α...
 def primitive (p : polynomial α) : Prop := ∀(q : polynomial α) (hq: non_unit_const q), (mod_by_non_unit_const p hq ≠ 0)
 
--- instance primitive.decidable : decidable (primitive p) := sorry
+instance primitive.decidable : decidable (primitive p) := sorry
 
 lemma h_div_lemma {p : polynomial α} (hp : ¬primitive p) : ∃(m : polynomial α) (hm : non_unit_const m), mod_by_non_unit_const p hm = 0 := sorry
 
@@ -85,7 +85,8 @@ begin
     have hp : primitive p := and.left h_p_q,
     have hq : primitive q := and.right h_p_q,
     have h_div : ∃(m : polynomial α) (hm : non_unit_const m), mod_by_non_unit_const (p * q) hm = 0, exact (h_div_lemma h_pq), 
-    have h_irred_div : ∃(n : polynomial α) (hn : non_unit_const n) (irreducible n), mod_by_non_unit_const (p * q) hn = 0, by sorry, 
+    have h_irred_div : ∃(n : polynomial α) (hn : (non_unit_const n) ∧ (irreducible n)), mod_by_non_unit_const (p * q) (and.left hn) = 0, by sorry, 
     have h_npq : ¬primitive p ∨ ¬primitive q, by sorry,
-    -- Or elim stuff here
+    show false, exact sorry
 end
+
