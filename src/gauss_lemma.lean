@@ -89,6 +89,9 @@ begin
     have h_div : ∃(m : polynomial α) (hm : non_unit_const m), mod_by_non_unit_const (p * q) hm = 0, exact (h_div_lemma h_pq), 
     have h_irred_div : ∃(n : polynomial α) (hn : (non_unit_const n) ∧ (irreducible n)), mod_by_non_unit_const (p * q) (and.left hn) = 0, by sorry, 
     have h_npq : ¬primitive p ∨ ¬primitive q, by sorry,
-    show false, exact sorry
+    show false,
+         cases h_npq with hnp hnq,
+            contradiction,
+            contradiction
 end
 
