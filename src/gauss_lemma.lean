@@ -13,6 +13,8 @@ variable [decidable_eq α]
 variable [unique_factorization_domain α]
 variable [has_mod α]
 
+instance : unique_factorization_domain (polynomial α) := sorry
+
 -- local attribute [instance] prop_decidable
 
 def is_const (p : polynomial α) : Prop := nat_degree p = 0 
