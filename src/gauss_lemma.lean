@@ -75,7 +75,7 @@ instance primitive.decidable : decidable (primitive p) := sorry
 
 lemma h_div_lemma {p : polynomial α} (hp : ¬primitive p) : ∃(m : polynomial α) (hm : non_unit_const m), mod_by_non_unit_const p hm = 0 := sorry
 
-lemma irred_div_pq_imp_irred_div_p_or_irred_div_q (p q : polynomial α) (irreducible n : polynomial α) (hc : non_unit_const n): 
+lemma irred_div_pq_imp_irred_div_p_or_irred_div_q (p q : polynomial α) (irreducible n : polynomial α) (hc : non_unit_const n) (hdiv : mod_by_non_unit_const (p*q) hc = 0): 
     const_divisor p (and.left hc) ∨ const_divisor q (and.left hc) := sorry
 
 lemma non_unit_const_divisor_imp_non_primitive (p : polynomial α) {q : polynomial α} (hq : non_unit_const q) : const_divisor p (and.left hq) → ¬primitive p := sorry
