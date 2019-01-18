@@ -90,7 +90,7 @@ begin
     have h_irred_div : ∃(n : polynomial α) (hn : (non_unit_const n) ∧ (irreducible n)), mod_by_non_unit_const (p * q) (and.left hn) = 0, by sorry, 
     have h_npq : ¬primitive p ∨ ¬primitive q, by sorry,
     show false,
-         cases h_npq with hnp hnq,
+         cases h_npq,
             contradiction,
             contradiction
 end
