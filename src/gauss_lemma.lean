@@ -50,12 +50,24 @@ begin
     show false, contradiction
 end 
 
+lemma deg_c_times_x_to_n_eq_n (n : ℕ) (c : α) (hc : c ≠ 0) : degree (C c * X^n) = n := 
+begin 
+    have h1: leading_coeff (C c) * leading_coeff X^n ≠ 0, by simp [hc], 
+    show degree (C c * X^n) = n, from calc
+         degree (C c * X^n) = degree (C c) + degree (X^n) : by rw [degree_mul_eq]
+                        ... = 0 + degree (X^n) : by rw [degree_C hc]
+                        ... = 0 + n : by rw degree_X_pow 
+                        ... = n : by simp
+end
+
+
 lemma const_mod_decreasing (hp: ¬is_const p) :
     nat_degree (p - C (leading_coeff p) * X^(nat_degree p)) < nat_degree p := 
     have h1 : p ≠ 0, by exact not_const_imp_non_zero hp, 
     have h2 : (leading_coeff p) = leading_coeff  (C (leading_coeff p) * X^(nat_degree p)), by simp,
     have h3 : (degree p) = (degree (C (leading_coeff p) * X^(nat_degree p))), by sorry,
-    have h4 : _ := degree_sub_lt h3 h1 h2,    
+    have h4 : _ := degree_sub_lt h3 h1 h2,  
+    show degree (p - C (leading_coeff p) * X ^ nat_degree p) < nat_degree p, by rw degree_eq_nat_degree,
     by sorry
 
 def mod_by_const : Π (p : polynomial α) {q : polynomial α},
