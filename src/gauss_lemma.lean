@@ -59,15 +59,32 @@ show degree (C c * X^n) = n, from calc
                     ... = n : by simp
 
 
+lemma nat_deg_zero_lt_nat_deg_p (hp : ¬is_const p) {q : polynomial α} (hq : q = 0) : nat_degree q < nat_degree p :=
+begin 
+    have h1 : nat_degree q = 0, by {rw hq, exact nat_degree_zero},
+    have h2 : nat_degree p ≠ 0, by exact hp,
+    show nat_degree q < nat_degree p, by sorry
+end 
+
+lemma nat_deg_non_zero_lt_nat_deg_p  {p q : polynomial α} (ha : degree q < nat_degree p) (hq : q ≠ 0) : nat_degree q < nat_degree p := 
+begin 
+    have h1 : ↑(nat_degree q) < ↑(nat_degree p), by {rw [degree_eq_nat_degree hq] at ha; exact ha},
+    show nat_degree q < nat_degree p, by rw []
+end 
+
 lemma const_mod_decreasing (hp: ¬is_const p) :
     nat_degree (p - C (leading_coeff p) * X^(nat_degree p)) < nat_degree p := 
+begin
     have h1 : p ≠ 0, by exact not_const_imp_non_zero hp, 
     have h2 : (leading_coeff p) = leading_coeff  (C (leading_coeff p) * X^(nat_degree p)), by simp,
     have h5 : leading_coeff p ≠ 0, by exact mt leading_coeff_eq_zero.1 h1,
     have h3 : (degree p) = (degree (C (leading_coeff p) * X^(nat_degree p))), by rw [deg_c_times_x_to_n_eq_n (nat_degree p) h5, degree_eq_nat_degree h1],
     have h4 : _ := degree_sub_lt h3 h1 h2,  
-    show degree (p - C (leading_coeff p) * X ^ nat_degree p) < nat_degree p, by rw degree_eq_nat_degree,
-    by sorry
+    have h6 : degree (p - C (leading_coeff p) * X ^ nat_degree p) < nat_degree p, by {rw [←degree_eq_nat_degree h1], exact h4},
+    cases em (p - C (leading_coeff p) * X ^ nat_degree p = 0) with heq0 hneq0,
+        by exact nat_deg_zero_lt_nat_deg_p hp heq0,
+        by exact nat_deg_non_zero_lt_nat_deg_p h6 hneq0
+end 
 
 def mod_by_const : Π (p : polynomial α) {q : polynomial α},
   is_const q → polynomial α
