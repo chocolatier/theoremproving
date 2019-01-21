@@ -46,7 +46,7 @@ begin
     have h0: p = (0 : polynomial α), by exact dne hpc,
     have h1: nat_degree (0 : polynomial α) = 0, by exact nat_degree_zero,
     have h2: nat_degree p ≠ 0, by exact hp,
-    have h3: nat_degree p = 0, by rw [h0, h2],
+    have h3: nat_degree p = 0, by rw [h0, h1],
     show false, contradiction
 end 
 
