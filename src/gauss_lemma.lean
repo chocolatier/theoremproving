@@ -50,7 +50,7 @@ begin
     show false, contradiction
 end 
 
-lemma deg_c_times_x_to_n_eq_n (n : ℕ) (c : α) (hc : c ≠ 0) : degree (C c * X^n) = n := 
+lemma deg_c_times_x_to_n_eq_n (n : ℕ) {c : α} (hc : c ≠ 0) : degree (C c * X^n) = n := 
 have h1: leading_coeff (C c) * leading_coeff X^n ≠ 0, by simp [hc], 
 show degree (C c * X^n) = n, from calc
         degree (C c * X^n) = degree (C c) + degree (X^n) : by rw [degree_mul_eq]
