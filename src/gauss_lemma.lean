@@ -44,8 +44,7 @@ lemma not_const_imp_non_zero (hp: ¬is_const p) : p ≠ (0 : polynomial α) :=
 begin
     by_contradiction hpc,
     have h0: p = (0 : polynomial α), by exact dne hpc,
-    have h1: degree (0 : polynomial α) = ⊥, by simp [degree_eq_bot],
-    have h2: nat_degree (0 : polynomial α) = 0, by {simp [nat_degree, h1]},
+    have h2: nat_degree (0 : polynomial α) = 0, by exact nat_degree_zero,
     have h3: nat_degree p ≠ 0, by exact hp,
     have h4: nat_degree p = 0, by rw [h0, h2],
     show false, contradiction
