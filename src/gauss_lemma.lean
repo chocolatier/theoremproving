@@ -1,8 +1,10 @@
 import data.polynomial
 import ring_theory.unique_factorization_domain
+import order.bounded_lattice
 
 open polynomial
 open classical
+open with_top
 
 universe u 
 
@@ -68,8 +70,8 @@ end
 
 lemma nat_deg_non_zero_lt_nat_deg_p  {p q : polynomial α} (ha : degree q < degree p) (hp : p ≠ 0) (hq : q ≠ 0) : nat_degree q < nat_degree p := 
 begin 
-    have h1 : (nat_degree q) < (nat_degree p), by {simp [degree_eq_nat_degree hp, degree_eq_nat_degree hq] at ha; exact ha},
-    -- show nat_degree q < nat_degree p, by rw []
+    have h1 : ↑(nat_degree q) < ↑(nat_degree p), by {rw [degree_eq_nat_degree hp, degree_eq_nat_degree hq] at ha; exact ha},
+    show nat_degree q < nat_degree p, by rw with_top.coe_lt_coe at h1 -- ↑?m3 < ↑?m4 doesn't match if ?m3 = ?m4 ?
 end 
 
 lemma const_mod_decreasing (hp: ¬is_const p) :
