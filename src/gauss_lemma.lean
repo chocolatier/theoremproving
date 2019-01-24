@@ -24,8 +24,6 @@ def is_const (p : polynomial α) : Prop := nat_degree p = 0
 instance is_const.decidable : decidable (is_const p) :=
 by unfold is_const; apply_instance
 
-#print is_const.decidable
-
 def leading_coeff_non_unit (p : polynomial α) : Prop := ¬is_unit (leading_coeff p) 
 
 instance is_unit.decidable : decidable (is_unit a) := sorry
