@@ -34,18 +34,12 @@ def non_unit_const (p : polynomial α) : Prop := (is_const p) ∧ (leading_coeff
 instance non_unit_const.decidable : decidable (non_unit_const p) :=
 by unfold non_unit_const; apply_instance
 
--- Stolen from tute
-lemma dne {p : Prop} (h : ¬¬p) : p :=
-or.elim (em p)
-  (assume hp : p, hp)
-  (assume hnp : ¬p, absurd hnp h)
-
 -- Not proud of contradiction here, but direct attempt 
 -- at proof went awry
 lemma not_const_imp_non_zero (hp: ¬is_const p) : p ≠ (0 : polynomial α) :=
 begin
     by_contradiction hpc,
-    have h0: p = (0 : polynomial α), by exact dne hpc,
+    have h0: p = (0 : polynomial α), by exact (not_not.1 hpc),
     have h1: nat_degree (0 : polynomial α) = 0, by exact nat_degree_zero,
     have h2: nat_degree p ≠ 0, by exact hp,
     have h3: nat_degree p = 0, by rw [h0, h1],
