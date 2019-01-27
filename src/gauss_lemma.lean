@@ -35,21 +35,11 @@ def non_unit_const (p : polynomial α) : Prop := (is_const p) ∧ (leading_coeff
 instance non_unit_const.decidable : decidable (non_unit_const p) :=
 by unfold non_unit_const; apply_instance
 
--- Not proud of contradiction here, but direct attempt 
--- at proof went awry
-lemma not_const_imp_non_zero (hp: ¬is_const p) : p ≠ (0 : polynomial α) :=
-begin
-    by_contradiction hpc,
-    have h0: p = (0 : polynomial α), by exact (not_not.1 hpc),
-    have h1: nat_degree (0 : polynomial α) = 0, by exact nat_degree_zero,
-    have h2: nat_degree p ≠ 0, by exact hp,
-    have h3: nat_degree p = 0, by rw [h0, h1],
-    show false, contradiction
-end 
-
--- TODO this is easier:
--- lemma not_const_imp_non_zero'  : ¬is_const p → p ≠ (0 : polynomial α) := 
--- mt begin sorry end
+lemma not_const_imp_non_zero  : ¬is_const p → p ≠ (0 : polynomial α) := 
+mt begin 
+ intro hp,
+ show is_const p, by {rw [hp, is_const], simp}
+end
 
 lemma deg_c_times_x_to_n_eq_n (n : ℕ) {c : α} (hc : c ≠ 0) : degree (C c * X^n) = n := 
 have h1: leading_coeff (C c) * leading_coeff X^n ≠ 0, by simp [hc], 
