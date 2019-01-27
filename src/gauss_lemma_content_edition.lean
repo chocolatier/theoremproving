@@ -39,4 +39,5 @@ lemma cont_mul_hom (p : polynomial α) (a : α) : (content (C a * p)) = ((span (
 
 #check gcd (span (singleton α)) 
 
-lemma prod_prim_is_prim {p q : polynomial α} (hp: is_primitive p) (hq : is_primitive q)  : is_primitive (p * q) 
+lemma prod_prim_is_prim {p q : polynomial α} (hp: is_primitive p) (hq : is_primitive q)  : is_primitive (p * q) := sorry
+
