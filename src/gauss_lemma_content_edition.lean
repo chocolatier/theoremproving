@@ -19,7 +19,7 @@ variable [gcd_domain α]
 
 def content (p : polynomial α) : ideal α := 
 let 
-    coeffts := map (λ x, p.to_fun x) p.support
+    coeffts := map p.to_fun p.support
 in 
     span coeffts
   
