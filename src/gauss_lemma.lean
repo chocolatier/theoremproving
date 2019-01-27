@@ -4,7 +4,6 @@ import order.bounded_lattice
 
 open polynomial
 open classical
-open with_top
 
 local attribute [instance, priority 0] classical.prop_decidable
 
