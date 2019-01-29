@@ -1,9 +1,16 @@
 import data.polynomial
 import ring_theory.unique_factorization_domain
 import order.bounded_lattice
+import ring_theory.localization
+import data.set
+import data.nat.basic
+
 
 open polynomial
 open classical
+open localization
+open set
+open nat
 
 local attribute [instance, priority 0] classical.prop_decidable
 
@@ -15,8 +22,6 @@ variables [integral_domain α] {p q r s : polynomial α}
 variable [decidable_eq α]
 variable [unique_factorization_domain α]
 variable [has_mod α]
-
-instance : unique_factorization_domain (polynomial α) := sorry
 
 def is_const (p : polynomial α) : Prop := nat_degree p = 0 
 
@@ -54,7 +59,8 @@ lemma nat_deg_zero_lt_nat_deg_p (hp : ¬is_const p) {q : polynomial α} (hq : q 
 begin 
     have h1 : nat_degree q = 0, by {rw hq, exact nat_degree_zero},
     have h2 : nat_degree p ≠ 0, by exact hp,
-    show nat_degree q < nat_degree p, by sorry
+    rw h1, 
+    show 0 < nat_degree p, by exact nat.pos_iff_ne_zero'.2 h2 
 end 
 
 lemma nat_deg_non_zero_lt_nat_deg_p  {p q : polynomial α} (ha : degree q < degree p) (hp : p ≠ 0) (hq : q ≠ 0) : nat_degree q < nat_degree p := 
@@ -104,9 +110,10 @@ def const_divisor : Π (p : polynomial α) {q : polynomial α}, is_const q → P
 -- Maybe better off using GCD coefft = 1? Have UFD α so can produce GCD Domain α...
 def primitive (p : polynomial α) : Prop := ∀(q : polynomial α) (hq: non_unit_const q), (mod_by_non_unit_const p hq ≠ 0)
 
--- instance primitive.decidable : decidable (primitive p) := sorry
-
-lemma h_div_lemma {p : polynomial α} (hp : ¬primitive p) : ∃(m : polynomial α) (hm : non_unit_const m), mod_by_non_unit_const p hm = 0 := sorry
+lemma h_div_lemma {p : polynomial α} (hp : ¬primitive p) : ∃(m : polynomial α) (hm : non_unit_const m), mod_by_non_unit_const p hm = 0 := 
+begin 
+    sorry
+end
 
 lemma irred_div_pq_imp_irred_div_p_or_irred_div_q (p q : polynomial α) (irreducible n : polynomial α) (hc : non_unit_const n) (hdiv : mod_by_non_unit_const (p*q) hc = 0): 
     const_divisor p (and.left hc) ∨ const_divisor q (and.left hc) := sorry
@@ -127,4 +134,3 @@ begin
             contradiction,
             contradiction
 end
-

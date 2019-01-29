@@ -26,11 +26,11 @@ inferred
   mul_zero_class.to_has_zero α
 -/
 
-def content (p : polynomial α) : ideal α :=  sorry
--- let 
---     coeffts := p.support.map p.to_fun 
--- in 
---     span coeffts
+def content (p : polynomial α) : ideal α := 
+let 
+    coeffts := p.support.map p.to_fun 
+in 
+    span coeffts
 
 def is_primitive (p : polynomial α) : Prop := 
 content p = span (singleton (1 : α))
