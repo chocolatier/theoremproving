@@ -28,7 +28,7 @@ inferred
 
 def content (p : polynomial α) : ideal α := 
 let 
-    coeffts := p.support.map p.to_fun 
+    coeffts := p.support.map coeff 
 in 
     span coeffts
 

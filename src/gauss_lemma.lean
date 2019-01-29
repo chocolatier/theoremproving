@@ -105,7 +105,7 @@ def mod_by_non_unit_const : Π (p : polynomial α) {q : polynomial α},
 
 def const_divisor : Π (p : polynomial α) {q : polynomial α}, is_const q → Prop 
 | p q := λ hq,
-    mod_by_const p hq = 0
+    q ∣ p
 
 -- Maybe better off using GCD coefft = 1? Have UFD α so can produce GCD Domain α...
 def primitive (p : polynomial α) : Prop := ¬∃q:polynomial α, ∃hq : non_unit_const q, const_divisor p hq.left
@@ -125,7 +125,7 @@ begin
     sorry
 end
 
-lemma divisors_mod_to_zero (p q r : polynomial α) (hq : is_const q) (hqp : mod_by_const p hq = 0) (hr : is_const r) : (r ∣ q) → mod_by_const p hr = 0 := 
+lemma divisor_transitive (p q r : polynomial α) (hq : is_const q) (hqp : mod_by_const p hq = 0) (hr : is_const r) : (r ∣ q) → mod_by_const p hr = 0 := 
 begin 
     sorry
 end
