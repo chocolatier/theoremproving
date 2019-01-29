@@ -108,7 +108,7 @@ def const_divisor : Π (p : polynomial α) {q : polynomial α}, is_const q → P
     mod_by_const p hq = 0
 
 -- Maybe better off using GCD coefft = 1? Have UFD α so can produce GCD Domain α...
-def primitive (p : polynomial α) : Prop := ∀(q : polynomial α), ∃(hq: non_unit_const q) → (mod_by_non_unit_const p hq ≠ 0)
+def primitive (p : polynomial α) : Prop := ∀(q : polynomial α), (∃ hq: non_unit_const q → (mod_by_non_unit_const p hq ≠ 0))
 
 lemma h_div_lemma {p : polynomial α} (hp : ¬primitive p) : ∃(m : polynomial α), ∃(hm : non_unit_const m), mod_by_non_unit_const p hm = 0 := 
 begin 
