@@ -111,12 +111,24 @@ def const_divisor : Π (p : polynomial α) {q : polynomial α}, is_const q → P
 def primitive (p : polynomial α) : Prop := ¬∃q:polynomial α, ∃hq : non_unit_const q, const_divisor p hq.left
 
 lemma h_div_lemma {p : polynomial α} (hp : ¬primitive p) : ∃(m : polynomial α), ∃(hm : non_unit_const m), mod_by_non_unit_const p hm = 0 := 
+   by exact not_not.1 hp
+
+lemma irred_div_pq_imp_irred_div_p_or_irred_div_q (p q : polynomial α) (irreducible n : polynomial α) (hc : non_unit_const n) (hdiv : mod_by_non_unit_const (p*q) hc = 0): 
+    const_divisor p (and.left hc) ∨ const_divisor q (and.left hc) := 
+begin 
+    sorry
+end 
+
+lemma div_imp_irred_div (p : polynomial α) : (∃(q : polynomial α) (hq : non_unit_const q), mod_by_non_unit_const p hq = 0) → (∃(r : polynomial α) (hr : non_unit_const r ∧ irreducible r), mod_by_non_unit_const p hr.left = 0)
+:= 
 begin 
     sorry
 end
 
-lemma irred_div_pq_imp_irred_div_p_or_irred_div_q (p q : polynomial α) (irreducible n : polynomial α) (hc : non_unit_const n) (hdiv : mod_by_non_unit_const (p*q) hc = 0): 
-    const_divisor p (and.left hc) ∨ const_divisor q (and.left hc) := sorry
+lemma divisors_mod_to_zero (p q r : polynomial α) (hq : is_const q) (hqp : mod_by_const p hq = 0) (hr : is_const r) : (r ∣ q) → mod_by_const p hr = 0 := 
+begin 
+    sorry
+end
 
 lemma non_unit_const_divisor_imp_non_primitive (p : polynomial α) {q : polynomial α} (hq : non_unit_const q) : const_divisor p (and.left hq) → ¬primitive p := sorry
 
