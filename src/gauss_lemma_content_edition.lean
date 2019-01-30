@@ -14,7 +14,7 @@ universe u
 variables {α : Type u} {a: α}
 
 variable [decidable_eq α]
-variable [comm_ring α]
+-- variable [comm_ring α]
 variable [gcd_domain α]
 variables [integral_domain α] {p q r s : polynomial α}
 variable [has_one α] -- Exclude the trivial ring
