@@ -13,15 +13,11 @@ universe u
 
 variables {α : Type u} {a: α}
 
+variable [decidable_eq α]
+variable [comm_ring α]
+variable [gcd_domain α]
 variables [integral_domain α] {p q r s : polynomial α}
 variable [has_one α] -- Exclude the trivial ring
-
-/-gauss_lemma_content_edition.lean:20:0: error
-synthesized type class instance is not definitionally equal to expression inferred by typing rules, synthesized
-  no_zero_divisors.to_has_zero α
-inferred
-  mul_zero_class.to_has_zero α
--/
 
 def content (p : polynomial α) : ideal α :=
 let
@@ -33,9 +29,6 @@ in
 def is_primitive (p : polynomial α) : Prop :=
 content p = span (singleton (1 : α))
 
-variable [decidable_eq α]
-variable [comm_ring α]
-variable [gcd_domain α]
 
 lemma cont_mul_hom (p : polynomial α) (a : α) : (content (C a * p)) = ((span (singleton a)) * (content p)) := sorry
 
