@@ -62,8 +62,6 @@ begin
     sorry
 end
 
-
-
 -- failed to synthesize type class instance for
 -- α : Type u,
 -- _inst_1 : integral_domain α,
