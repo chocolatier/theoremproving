@@ -52,6 +52,28 @@ def const_divisor : Π (p q : polynomial α),  Prop
 -- Maybe better off using GCD coefft = 1? Have UFD α so can produce GCD Domain α...
 def primitive (p : polynomial α) : Prop := ∀(q : polynomial α), non_unit_const q → ¬const_divisor p q
 
+lemma c_div_if_div (a b : α) : a ∣ b → (C a) ∣ (C b) := 
+begin
+    sorry
+end
+
+lemma c_div_iff_div (a b : α) : a ∣ b ↔ (C a) ∣ (C b) := 
+begin 
+    sorry
+end
+
+
+
+-- failed to synthesize type class instance for
+-- α : Type u,
+-- _inst_1 : integral_domain α,
+-- _inst_2 : decidable_eq α,
+-- _inst_3 : unique_factorization_domain α,
+-- _inst_4 : has_mod α,
+-- a : α
+-- ⊢ monoid (Type u) 
+-- UFD α → Comm_Ring α → monoid α, surely
+lemma c_irred_iff_a_irred (a : α) : irreducible α ↔ irreducible (C a) := sorry
 
 lemma prod_of_prim_is_prim (p q : polynomial α) : (primitive p ∧ primitive q) → primitive (p * q) := 
 begin 
@@ -62,7 +84,7 @@ begin
     have h_helper : ¬(∀(r : polynomial α), non_unit_const r → ¬const_divisor (p * q) r) , by exact h_pq,
     have h_helper2 : ∃r:polynomial α, ¬(non_unit_const r → ¬const_divisor (p * q) r), by exact not_forall.1 h_helper,
     have h_div : ∃(m : polynomial α), non_unit_const m ∧ const_divisor (p * q) m, by {simp [not_imp, not_not] at h_helper2, exact h_helper2}, 
-    have h_irred_div : ∃(n : polynomial α) (hn : (non_unit_const n) ∧ (irreducible n)), mod_by_non_unit_const (p * q) (and.left hn) = 0, by sorry, 
+    have h_irred_div : ∃(n : polynomial α) (hn : (non_unit_const n) ∧ (irreducible n)), const_divisor (p * q) n, by sorry, 
     have h_npq : ¬primitive p ∨ ¬primitive q, by sorry,
     show false,
          cases h_npq,
