@@ -7,6 +7,7 @@ import ring_theory.localization
 open polynomial
 open classical
 open ideal
+open localization
 
 local attribute [instance, priority 0] classical.prop_decidable
 
