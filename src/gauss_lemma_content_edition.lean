@@ -30,6 +30,8 @@ in
 def is_primitive (p : polynomial α) : Prop :=
 content p = span (singleton (1 : α))
 
+def polynomial_coeff_gcd (p : polynomial α) : α := sorry
+
 -- noncomputable def ideal_gcd (i : ideal α) : (ideal α) := some (λx:ideal α, i ≤ x ∧ (∀(j : ideal α), i ≤ j → x ≤ j))
 
 lemma cont_prod_sub_prod_cont {p q : polynomial α} (x : α) (hx : x ∈ content (p * q)) : (x ∈ content p * content q) := sorry
@@ -44,4 +46,8 @@ lemma prod_prim_is_prim {p q : polynomial α} (hp: is_primitive p) (hq : is_prim
 
 def quot_poly (p : polynomial α) : polynomial (quotient_ring α) := sorry
 
-lemma irred_in_base_imp_irred_in_quot {p : polynomial α} (hp_p : is_primitive p) (hp_ir : is_primitive p) : irreducible (quot_poly p) := sorry
+lemma irred_imp_gcd_coeff_1 (p : polynomial α) (hp : irreducible p) : polynomial_coeff_gcd p = 1 := sorry
+
+lemma irred_in_base_imp_irred_in_quot {p : polynomial α} (hp_p : is_primitive p) (hp_ir : irreducible p) (hp_nc : ¬is_const p) : irreducible (quot_poly p) := sorry
+
+-- lemma irred_in_quot_imp_irred_in_base {p : polynomial (quotient_ring α)} (hp_ir : irreducible p) 
