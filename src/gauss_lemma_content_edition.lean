@@ -2,6 +2,7 @@ import data.polynomial
 import algebra.gcd_domain
 import ring_theory.ideals
 import ring_theory.ideal_operations
+import ring_theory.localization
 
 open polynomial
 open classical
@@ -39,3 +40,7 @@ lemma cont_scalar_mul (p : polynomial α) (a : α) : (content (C a * p)) = ((spa
 -- lemma cont_gcd_eq (p : polynomial α) (q : polynomial α) : ideal_gcd (content (p * q)) = ideal_gcd (content p) * ideal_gcd (content q) := sorry
 
 lemma prod_prim_is_prim {p q : polynomial α} (hp: is_primitive p) (hq : is_primitive q)  : is_primitive (p * q) := sorry
+
+def quot_poly (p : polynomial α) : polynomial (quotient_ring α) := sorry
+
+lemma irred_in_base_imp_irred_in_quot {p : polynomial α} (hp_p : is_primitive p) (hp_ir : is_primitive p) : irreducible (quot_poly p) := sorry
