@@ -62,19 +62,10 @@ begin
     sorry
 end
 
--- failed to synthesize type class instance for
--- α : Type u,
--- _inst_1 : integral_domain α,
--- _inst_2 : decidable_eq α,
--- _inst_3 : unique_factorization_domain α,
--- _inst_4 : has_mod α,
--- a : α
--- ⊢ monoid (Type u) 
--- UFD α → Comm_Ring α → monoid α, surely
-lemma c_irred_iff_a_irred (a : α) : irreducible α ↔ irreducible (C a) := sorry
+lemma c_irred_iff_a_irred (a : α) : irreducible a ↔ irreducible (C a) := sorry
 
 lemma prod_of_prim_is_prim (p q : polynomial α) : (primitive p ∧ primitive q) → primitive (p * q) := 
-begin 
+begin  
     intros h_p_q, 
     by_contradiction h_pq, 
     have hp : primitive p := and.left h_p_q,
