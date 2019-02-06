@@ -23,6 +23,8 @@ variable [decidable_eq α]
 variable [unique_factorization_domain α]
 variable [has_mod α]
 
+-- set_option pp.all true
+
 def is_const (p : polynomial α) : Prop := nat_degree p = 0 
 
 instance is_const.decidable : decidable (is_const p) :=
@@ -51,7 +53,7 @@ have h1: leading_coeff (C c) * leading_coeff X^n ≠ 0, by simp [hc],
 show degree (C c * X^n) = n, from calc
         degree (C c * X^n) = degree (C c) + degree (X^n) : by rw [degree_mul_eq]
                     ... = 0 + degree (X^n) : by rw [degree_C hc]
-                    ... = 0 + n : by rw degree_X_pow 
+                    ... = 0 + n : by simp [degree_X_pow] 
                     ... = n : by simp
 
 
