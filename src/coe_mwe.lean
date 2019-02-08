@@ -10,8 +10,8 @@ universe u
 local attribute [instance, priority 0] classical.prop_decidable
 
 variables {α : Type u} {a: α} 
-variables [integral_domain α] {p q r s : polynomial α}
 variable [decidable_eq α]
+variables [integral_domain α]
 
 lemma minimal (n : ℕ) : degree (X^n : polynomial α) = n := by squeeze_simp 
 
