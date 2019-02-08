@@ -3,7 +3,7 @@ import tactic.squeeze
 
 open polynomial
 
--- set_option pp.all true
+set_option pp.all true
 
 universe u 
 
@@ -11,7 +11,7 @@ variables {α : Type u}
 variable [decidable_eq α]
 variables [integral_domain α]
 
-lemma minimal (n : ℕ) : degree (X^n : polynomial α) = n := by squeeze_simp 
+lemma minimal (n : ℕ) : degree (X^n : polynomial α) = n := by simp 
 
 lemma working (n : ℕ) : degree (X^n : polynomial α) = n := by simp [degree_X_pow] -- this works
 
