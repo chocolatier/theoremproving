@@ -16,7 +16,7 @@ local attribute [instance, priority 0] classical.prop_decidable
 
 universe u 
 
-variables {α : Type u} {a: α} 
+variables {α : Type u} {a: α}  
 
 variables [integral_domain α] {p q r s : polynomial α}
 variable [decidable_eq α]
@@ -49,7 +49,6 @@ end
 def const_divisor : Π (p q : polynomial α),  Prop 
 | p q := is_const q ∧ q ∣ p
 
--- Maybe better off using GCD coefft = 1? Have UFD α so can produce GCD Domain α...
 def primitive (p : polynomial α) : Prop := ∀(q : polynomial α), non_unit_const q → ¬const_divisor p q
 
 lemma c_div_if_div (a b : α) : a ∣ b → (C a) ∣ (C b) := 
