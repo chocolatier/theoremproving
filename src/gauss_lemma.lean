@@ -76,7 +76,7 @@ begin
     have h_helper : ¬(∀(r : polynomial α), non_unit_const r → ¬const_divisor (p * q) r) , by exact h_pq,
     have h_helper2 : ∃r:polynomial α, ¬(non_unit_const r → ¬const_divisor (p * q) r), by exact not_forall.1 h_helper,
     have h_div : ∃(m : polynomial α), non_unit_const m ∧ const_divisor (p * q) m, by {simp [not_imp, not_not] at h_helper2, exact h_helper2}, 
-    have h_irred_div : ∃(n : polynomial α) (hn : (non_unit_const n) ∧ (irreducible n)), const_divisor (p * q) n, by sorry, 
+    have h_irred_div : ∃(n : polynomial α) (hn : (is_const n) ∧ (irreducible n)), const_divisor (p * q) n, by sorry, 
     have h_npq : ¬primitive p ∨ ¬primitive q, by sorry,
     show false,
          cases h_npq,
