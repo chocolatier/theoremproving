@@ -3,29 +3,30 @@ import tactic.squeeze
 
 open polynomial
 
-set_option pp.all true
+universe u
 
-universe u 
+variables {α : Type u} [integral_domain α] [decidable_eq α]
 
-variables {α : Type u} 
-variable [decidable_eq α]
-variables [integral_domain α]
+lemma minimal_example (n : ℕ) : degree (X^n : polynomial α) = n :=
+begin
+  simp,
+  -- We're left with `↑n = ↑n`
+  sorry
+end
 
-lemma minimal (n : ℕ) : degree (X^n : polynomial α) = n := by simp 
+@[simp] lemma nat.cast_with_bot_cast {α} [add_monoid α] [has_one α] : ∀ n : ℕ,
+  (n : with_bot α) = (n : α)
+| 0 := rfl
+| (n+1) := by simp [nat.cast_with_bot_cast n]
 
-lemma working (n : ℕ) : degree (X^n : polynomial α) = n := by simp [degree_X_pow] -- this works
+@[simp] lemma nat.cast_with_bot : ∀ n : ℕ,
+  @coe _ (with_bot ℕ) (@coe_to_lift _ _ (@coe_base _ _ nat.cast_coe)) n = n :=
+by simp
 
-lemma step_by_step (n : ℕ) : degree (X^n : polynomial α) = n := 
-begin 
-   rw polynomial.degree_pow_eq,
-   rw polynomial.degree_X,
-   rw add_monoid.smul_one
-end 
+lemma minimal_example' (n : ℕ) : degree (X^n : polynomial α) = n :=
+by simp
 
--- Source of error
-lemma deg_c_times_x_to_n_eq_n (n : ℕ) {c : α} (hc : c ≠ 0) : degree (C c * X^n) = n := 
-show degree (C c * X^n) = n, from calc
-        degree (C c * X^n) = degree (C c) + degree (X^n) : by rw [degree_mul_eq]
-                    ... = 0 + degree (X^n) : by rw [degree_C hc]
-                    ... = 0 + n : by rw [degree_X_pow] -- simp [degree_X_pow] also works fine. 
-                    ... = n : by simp
+-- Maybe this lemma won't even be needed; just use the simplifier in its place.
+lemma deg_c_times_x_to_n_eq_n (n : ℕ) {c : α} (hc : c ≠ 0) : degree (C c * X^n) = n :=
+by simp *
+
