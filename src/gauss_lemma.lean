@@ -63,6 +63,10 @@ end
 
 lemma c_irred_iff_a_irred (a : α) : irreducible a ↔ irreducible (C a) := sorry
 
+lemma div_imp_irred_div (p : polynomial α) : ∃(m : polynomial α), m ∣ p → ∃(n : polynomial α), (irreducible n) ∧ n ∣ p := sorry
+
+lemma divisor_of_const_is_const (p q : polynomial α) (hp : is_const p) (hq : q ∣ p) : is_const q := sorry
+
 lemma prod_of_prim_is_prim (p q : polynomial α) : (primitive p ∧ primitive q) → primitive (p * q) := 
 begin  
     intros h_p_q, 
