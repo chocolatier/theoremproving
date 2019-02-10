@@ -34,21 +34,19 @@ content p = span (singleton (1 : α))
 
 def polynomial_coeff_gcd (p : polynomial α) : α := sorry
 
--- noncomputable def ideal_gcd (i : ideal α) : (ideal α) := some (λx:ideal α, i ≤ x ∧ (∀(j : ideal α), i ≤ j → x ≤ j))
-
 lemma cont_prod_sub_prod_cont {p q : polynomial α} (x : α) (hx : x ∈ content (p * q)) : (x ∈ content p * content q) := sorry
 
 lemma cont_scalar_mul_fwd (x : α) {p : polynomial α} {a : α} (hx : x ∈ content (C a * p)) : (x ∈ (span (singleton a)) * (content p)) := sorry
 
 lemma cont_scalar_mul (p : polynomial α) (a : α) : (content (C a * p)) = ((span (singleton a)) * (content p)) := sorry
 
--- lemma cont_gcd_eq (p : polynomial α) (q : polynomial α) : ideal_gcd (content (p * q)) = ideal_gcd (content p) * ideal_gcd (content q) := sorry
-
 lemma prod_prim_is_prim {p q : polynomial α} (hp: is_primitive p) (hq : is_primitive q)  : is_primitive (p * q) := sorry
 
-def to_quot (a : α) : quotient_ring α := sorry -- ↑a
+def to_quot (a : α) : quotient_ring α := ⟦(a, (1 : non_zero_divisors α))⟧
 
 def quot_poly (p : polynomial α) : polynomial (quotient_ring α) := to_quot ∘ p 
+
+lemma prod_cont_sub_rad (p q : polynomial α) : content p * content q ≤ radical (content (p * q))
 
 lemma irred_imp_gcd_coeff_1 (p : polynomial α) (hp : irreducible p) : polynomial_coeff_gcd p = 1 := sorry
 
