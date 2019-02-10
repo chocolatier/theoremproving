@@ -46,7 +46,7 @@ def to_quot (a : α) : quotient_ring α := ⟦(a, (1 : non_zero_divisors α))⟧
 
 def quot_poly (p : polynomial α) : polynomial (quotient_ring α) := to_quot ∘ p 
 
-lemma prod_cont_sub_rad (p q : polynomial α) : content p * content q ⊆ radical (content (p * q)) := sorry
+lemma prod_cont_sub_rad (p q : polynomial α) : content p * content q ≤ radical (content (p * q)) := sorry
 
 lemma irred_imp_gcd_coeff_1 (p : polynomial α) (hp : irreducible p) : polynomial_coeff_gcd p = 1 := sorry
 
