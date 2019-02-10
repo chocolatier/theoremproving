@@ -67,6 +67,8 @@ lemma div_imp_irred_div (p : polynomial α) : ∃(m : polynomial α), m ∣ p �
 
 lemma divisor_of_const_is_const (p q : polynomial α) (hp : is_const p) (hq : q ∣ p) : is_const q := sorry
 
+lemma div_pq_imp_div_p_or_q (p q r : polynomial α) (hdiv : r ∣ (p * q)) (hr : irreducible r) : r ∣ p ∨ r ∣ q := sorry
+
 lemma prod_of_prim_is_prim (p q : polynomial α) : (primitive p ∧ primitive q) → primitive (p * q) := 
 begin  
     intros h_p_q, 
