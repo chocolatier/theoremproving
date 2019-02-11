@@ -9,6 +9,11 @@ open classical
 open ideal
 open localization
 
+noncomputable theory
+
+-- set_option trace.class_instances true
+-- set_option class.instance_max_depth 1000
+
 local attribute [instance, priority 0] classical.prop_decidable
 
 universe u
@@ -40,13 +45,13 @@ lemma cont_scalar_mul_fwd (x : α) {p : polynomial α} {a : α} (hx : x ∈ cont
 
 lemma cont_scalar_mul (p : polynomial α) (a : α) : (content (C a * p)) = ((span (singleton a)) * (content p)) := sorry
 
+lemma prod_cont_sub_rad (p q : polynomial α) : content p * content q ≤ radical (content (p * q)) := sorry
+
 lemma prod_prim_is_prim {p q : polynomial α} (hp: is_primitive p) (hq : is_primitive q)  : is_primitive (p * q) := sorry
 
 def to_quot (a : α) : quotient_ring α := ⟦(a, (1 : non_zero_divisors α))⟧
 
-def quot_poly (p : polynomial α) : polynomial (quotient_ring α) := to_quot ∘ p 
-
-lemma prod_cont_sub_rad (p q : polynomial α) : content p * content q ≤ radical (content (p * q)) := sorry
+def quot_poly (p : polynomial α) : polynomial (quotient_ring α) := p.map to_quot
 
 lemma irred_imp_gcd_coeff_1 (p : polynomial α) (hp : irreducible p) : polynomial_coeff_gcd p = 1 := sorry
 
