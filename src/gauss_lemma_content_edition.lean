@@ -57,7 +57,24 @@ lemma irred_imp_gcd_coeff_1 (p : polynomial α) (hp : irreducible p) : polynomia
 
 lemma irred_in_base_imp_irred_in_quot {p : polynomial α} (hp_p : is_primitive p) (hp_ir : irreducible p) (hp_nc : ¬is_const p) : irreducible (quot_poly p) := 
 begin 
-  sorry
+    by_contradiction h_contr,
+    let p' := quot_poly p,
+    have h1: ∃(m n : polynomial (quotient_ring α)), (¬ is_unit m) ∧ (¬ is_unit n) ∧ m * n = p', by sorry,
+    apply exists.elim h1,
+    intros m hm,
+    apply exists.elim hm,
+    intros n h_prod, -- ideally both apply and intros should be a single statement
+    have h2: ∃(c d : polynomial α), (is_const c) ∧ quot_poly c * m = quot_poly d, by sorry, 
+    apply exists.elim h2,
+    intros c hc,
+    apply exists.elim hc,
+    intros d hd,
+    have h3: ∃(c₂ d₂ : polynomial α), (is_const c₂) ∧ quot_poly c₂ * n = quot_poly d₂, by sorry, 
+    apply exists.elim h3,
+    intros c₂ hc₂,
+    apply exists.elim hc₂,
+    intros d₂ hd₂,
+
 end
 
 -- lemma irred_in_quot_imp_irred_in_base {p : polynomial (quotient_ring α)} (hp_ir : irreducible p) 
