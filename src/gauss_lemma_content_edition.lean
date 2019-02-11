@@ -59,8 +59,8 @@ lemma quot_poly_mult (p : polynomial (quotient_ring α)) : ∃(c : α) (d : poly
 
 lemma irred_in_base_imp_irred_in_quot {p : polynomial α} (hp_p : is_primitive p) (hp_ir : irreducible p) (hp_nc : ¬is_const p) : irreducible (quot_poly p) := 
 begin 
-    by_contradiction h_contr,
     let p' := quot_poly p,
+    by_contradiction h_contr,
     have h1: ∃(m n : polynomial (quotient_ring α)), (¬ is_unit m) ∧ (¬ is_unit n) ∧ m * n = p', by sorry,
     apply exists.elim h1,
     intros m hm,
