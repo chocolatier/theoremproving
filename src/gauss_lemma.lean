@@ -32,15 +32,7 @@ by unfold is_const; apply_instance
 
 def leading_coeff_non_unit (p : polynomial α) : Prop := ¬is_unit (leading_coeff p) 
 
-instance is_unit.decidable : decidable (is_unit a) := sorry
-
-instance leading_coeff_non_unit.decidable : decidable (leading_coeff_non_unit p) :=
-by unfold leading_coeff_non_unit; apply_instance
-
 def non_unit_const (p : polynomial α) : Prop := (is_const p) ∧ (leading_coeff_non_unit p)
-
-instance non_unit_const.decidable : decidable (non_unit_const p) :=
-by unfold non_unit_const; apply_instance
 
 lemma not_const_imp_non_zero  : ¬is_const p → p ≠ (0 : polynomial α) := 
 mt begin 
@@ -73,7 +65,8 @@ begin
     by_contra hc,
     rw not_exists at hc,
     -- rw fails, even though we have hc : ∀ (x : polynomial α), ¬(irreducible x ∧ x ∣ p)
-    rw not_and at hc, 
+    -- rw not_and at hc, 
+    have h1 : ∀(x : polynomial α), ¬irreducible x ∨ ¬x ∣ p, by {rw [not_and] at hc, exact hc}
 end
 
 lemma divisor_of_const_is_const (p q : polynomial α) (hp : is_const p) (hq : q ∣ p) : is_const q := sorry
@@ -97,6 +90,7 @@ begin
     -- if C a ∤ g, then there exists coefft dⱼ of g, s.t. a ∤ dⱼ. coefft k of x^(i+j) will 
     -- be k = ∑cₘdₙ, where m + n = i + j. Except when m = i and n = j, either m < i or n < j
     -- so a ∣ cₘdₙ. But a ∤ cᵢdⱼ. Hence a ∤ k. Contradiction. 
+    -- Tactic 2 : n irred → n prime by polynomial α being domain.
     have h_n_div : (n ∣ p) ∨ (n ∣ q), by sorry, 
     have h_npq : ¬primitive p ∨ ¬primitive q, by sorry,
     show false,
@@ -112,6 +106,8 @@ def quot_poly (p : polynomial α) : polynomial (quotient_ring α) := p.map to_qu
 
 lemma has_primitive_factorisation (p : polynomial α) : ∃(c : α) (p' : polynomial α), primitive p' ∧ C c * p' = p := sorry       
 
+-- Not sure how to approach this. Normal proof is just multiplying through by the lcm of the denominators of the coeffts in 
+-- reduced form. But I've failed to find the notion of a reduced form.
 lemma quot_poly_mult (p : polynomial (quotient_ring α)) : ∃(c : α) (d : polynomial α), quot_poly (C c) * p = quot_poly d := sorry 
 
 lemma irred_in_base_imp_irred_in_quot {p : polynomial α} (hp_p : primitive p) (hp_ir : irreducible p) (hp_nc : ¬is_const p) : irreducible (quot_poly p) := 
