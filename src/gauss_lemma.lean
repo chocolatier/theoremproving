@@ -71,7 +71,10 @@ end
 
 lemma divisor_of_const_is_const (p q : polynomial α) (hp : is_const p) (hq : q ∣ p) : is_const q := sorry
 
-lemma div_pq_imp_div_p_or_q (p q r : polynomial α) (hdiv : r ∣ (p * q)) (hr : irreducible r) : r ∣ p ∨ r ∣ q := sorry
+lemma div_pq_imp_div_p_or_q (p q r : polynomial α) (hdiv : r ∣ (p * q)) (hr : irreducible r) : r ∣ p ∨ r ∣ q :=
+begin 
+    simp
+end
 
 lemma prod_of_prim_is_prim (p q : polynomial α) : (primitive p ∧ primitive q) → primitive (p * q) := 
 begin  
@@ -90,7 +93,12 @@ begin
     -- if C a ∤ g, then there exists coefft dⱼ of g, s.t. a ∤ dⱼ. coefft k of x^(i+j) will 
     -- be k = ∑cₘdₙ, where m + n = i + j. Except when m = i and n = j, either m < i or n < j
     -- so a ∣ cₘdₙ. But a ∤ cᵢdⱼ. Hence a ∤ k. Contradiction. 
-    -- Tactic 2 : n irred → n prime by polynomial α being domain.
+    -- Tactic 2 : n irred → n prime as a const by UFD. α/(n) is domain, so α/(n)[x] is domain
+    -- n ∣ pq, so pq vanishes in α/(n)[x]. Hence p vanishes or q vanishes. But poly p vanishes
+    -- iff n ∣ p. n ∣ p or n ∣ q. 
+    -- α →  α[x]
+    -- ↓    ↓
+    -- α(n) →α/(n)[x]
     have h_n_div : (n ∣ p) ∨ (n ∣ q), by sorry, 
     have h_npq : ¬primitive p ∨ ¬primitive q, by sorry,
     show false,
@@ -104,10 +112,11 @@ def to_quot (a : α) : quotient_ring α := ⟦(a, (1 : non_zero_divisors α))⟧
 
 def quot_poly (p : polynomial α) : polynomial (quotient_ring α) := p.map to_quot
 
+-- set c = gcd coeffts. 
 lemma has_primitive_factorisation (p : polynomial α) : ∃(c : α) (p' : polynomial α), primitive p' ∧ C c * p' = p := sorry       
 
 -- Not sure how to approach this. Normal proof is just multiplying through by the lcm of the denominators of the coeffts in 
--- reduced form. But I've failed to find the notion of a reduced form.
+-- reduced form. But I've failed to find the notion of a reduced form. 
 lemma quot_poly_mult (p : polynomial (quotient_ring α)) : ∃(c : α) (d : polynomial α), quot_poly (C c) * p = quot_poly d := sorry 
 
 lemma irred_in_base_imp_irred_in_quot {p : polynomial α} (hp_p : primitive p) (hp_ir : irreducible p) (hp_nc : ¬is_const p) : irreducible (quot_poly p) := 
@@ -124,10 +133,13 @@ begin
     intros c hc,
     apply exists.elim hc,
     intros d hd,
+    have h2_irred : ∃(c' : α) (d' : polynomial α), (primitive d') ∧ ((C c') * d' = d), by exact has_primitive_factorisation d,
     have h3: ∃(c₂ : α) (d₂ : polynomial α), quot_poly (C c₂) * n = quot_poly d₂, by exact quot_poly_mult n, 
     apply exists.elim h3,
     intros c₂ hc₂,
     apply exists.elim hc₂,
     intros d₂ hd₂,
+    have h3_irred : ∃(c₂' : α) (d₂' : polynomial α), (primitive d₂') ∧ ((C c₂') * d₂' = d₂), by exact has_primitive_factorisation d₂,
+    
 
 end
