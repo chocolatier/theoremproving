@@ -53,6 +53,7 @@ def const_divisor : Π (p q : polynomial α),  Prop
 
 def primitive (p : polynomial α) : Prop := ∀(q : polynomial α), non_unit_const q → ¬const_divisor p q
 
+-- Subring of constant polynomials α is isomorphic to α. Manual unfolds/rws seem the wrong approach. 
 lemma c_div_if_div (a b : α) : a ∣ b → (C a) ∣ (C b) := 
 begin
     sorry
@@ -65,7 +66,15 @@ end
 
 lemma c_irred_iff_a_irred (a : α) : irreducible a ↔ irreducible (C a) := sorry
 
-lemma div_imp_irred_div (p : polynomial α) : ∃(m : polynomial α), m ∣ p → ∃(n : polynomial α), (irreducible n) ∧ n ∣ p := sorry
+-- Tactic : Argue on degree. If m ∣ n, deg m < deg n or deg m = deg n = 0. deg bottoms out, and if m is const
+-- use UFD-ness of α to argue irreducible factorization. 
+lemma div_imp_irred_div (p m : polynomial α) (hm : m ∣ p) : ∃(n : polynomial α), (irreducible n) ∧ n ∣ p := 
+begin
+    by_contra hc,
+    rw not_exists at hc,
+    -- rw fails, even though we have hc : ∀ (x : polynomial α), ¬(irreducible x ∧ x ∣ p)
+    rw not_and at hc, 
+end
 
 lemma divisor_of_const_is_const (p q : polynomial α) (hp : is_const p) (hq : q ∣ p) : is_const q := sorry
 
@@ -80,7 +89,15 @@ begin
     have h_helper : ¬(∀(r : polynomial α), non_unit_const r → ¬const_divisor (p * q) r) , by exact h_pq,
     have h_helper2 : ∃r:polynomial α, ¬(non_unit_const r → ¬const_divisor (p * q) r), by exact not_forall.1 h_helper,
     have h_div : ∃(m : polynomial α), non_unit_const m ∧ const_divisor (p * q) m, by {simp [not_imp, not_not] at h_helper2, exact h_helper2}, 
-    have h_irred_div : ∃(n : polynomial α) (hn : (is_const n) ∧ (irreducible n)), const_divisor (p * q) n, by sorry, 
+    have h_irred_div : ∃(n : polynomial α), ((is_const n) ∧ (irreducible n)) ∧ const_divisor (p * q) n, by sorry, 
+    apply exists.elim h_irred_div,
+    intros n hn,
+    -- Tactic: const divisor (C a) only divides p if a divides all coeffts of p. C a ∣ pq.
+    -- If C a ∤ f, then some coefft cᵢ of f, s.t. a ∤ cᵢ. Pick the minimal such cᵢ. Similarly 
+    -- if C a ∤ g, then there exists coefft dⱼ of g, s.t. a ∤ dⱼ. coefft k of x^(i+j) will 
+    -- be k = ∑cₘdₙ, where m + n = i + j. Except when m = i and n = j, either m < i or n < j
+    -- so a ∣ cₘdₙ. But a ∤ cᵢdⱼ. Hence a ∤ k. Contradiction. 
+    have h_n_div : (n ∣ p) ∨ (n ∣ q), by sorry, 
     have h_npq : ¬primitive p ∨ ¬primitive q, by sorry,
     show false,
          cases h_npq,
@@ -92,6 +109,8 @@ end
 def to_quot (a : α) : quotient_ring α := ⟦(a, (1 : non_zero_divisors α))⟧
 
 def quot_poly (p : polynomial α) : polynomial (quotient_ring α) := p.map to_quot
+
+lemma has_primitive_factorisation (p : polynomial α) : ∃(c : α) (p' : polynomial α), primitive p' ∧ C c * p' = p := sorry       
 
 lemma quot_poly_mult (p : polynomial (quotient_ring α)) : ∃(c : α) (d : polynomial α), quot_poly (C c) * p = quot_poly d := sorry 
 

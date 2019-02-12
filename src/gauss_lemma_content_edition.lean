@@ -41,7 +41,13 @@ def polynomial_coeff_gcd (p : polynomial α) : α := sorry
 
 lemma cont_prod_sub_prod_cont {p q : polynomial α} (x : α) (hx : x ∈ content (p * q)) : (x ∈ content p * content q) := sorry
 
-lemma cont_scalar_mul_fwd (x : α) {p : polynomial α} {a : α} (hx : x ∈ content (C a * p)) : (x ∈ (span (singleton a)) * (content p)) := sorry
+lemma cont_scalar_mul_fwd (x : α) {p : polynomial α} {a : α} (hx : x ∈ content (C a * p)) : (x ∈ (span (singleton a)) * (content p)) := 
+begin 
+    unfold content at hx,
+    unfold content,
+    unfold has_mul.mul,
+    unfold has_mul.mul at hx,
+end
 
 lemma cont_scalar_mul (p : polynomial α) (a : α) : (content (C a * p)) = ((span (singleton a)) * (content p)) := sorry
 
