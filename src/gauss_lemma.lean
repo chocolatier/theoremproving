@@ -30,9 +30,7 @@ def is_const (p : polynomial α) : Prop := nat_degree p = 0
 instance is_const.decidable : decidable (is_const p) :=
 by unfold is_const; apply_instance
 
-def leading_coeff_non_unit (p : polynomial α) : Prop := ¬is_unit (leading_coeff p) 
-
-def non_unit_const (p : polynomial α) : Prop := (is_const p) ∧ (leading_coeff_non_unit p)
+def non_unit_const (p : polynomial α) : Prop := (is_const p) ∧ (¬is_unit p)
 
 lemma not_const_imp_non_zero  : ¬is_const p → p ≠ (0 : polynomial α) := 
 mt begin 
@@ -100,7 +98,7 @@ begin
     have h_irred_div : ∃(n : α), (irreducible n) ∧ const_divisor (p * q) (C n), by sorry, 
     apply exists.elim h_irred_div,
     intros n hn,
-    have h_n_div : (n ∣ p) ∨ (n ∣ q), by sorry, 
+    have h_n_div : (C n ∣ p) ∨ (C n ∣ q), by sorry, 
     have h_npq : ¬primitive p ∨ ¬primitive q, by sorry,
     show false,
          cases h_npq,
@@ -120,7 +118,19 @@ lemma has_primitive_factorisation (p : polynomial α) : ∃(c : α) (p' : polyno
 -- reduced form. But I've failed to find the notion of a reduced form. 
 lemma quot_poly_mult (p : polynomial (quotient_ring α)) : ∃(c : α) (d : polynomial α), quot_poly (C c) * p = quot_poly d := sorry 
 
+lemma irred_imp_prim (p : polynomial α) (hp : irreducible p): primitive p :=  
+begin 
+    by_contradiction hc,
+    have h1 : ∃(q : polynomial α), ¬(non_unit_const q → ¬const_divisor p q), by exact not_forall.1 hc,
+    apply exists.elim h1,
+    intros q hq,
+    rw [not_imp, not_not] at hq,
+    have h_non_unit_const : _ := and.left hq,
+    have h_non_unit : _ := and.right h_non_unit_const,
+end
+
 lemma irred_in_base_imp_irred_in_quot {p : polynomial α} (hp_ir : irreducible p) (hp_nc : ¬is_const p) : irreducible (quot_poly p) := 
 begin 
-
+    by_contra hc,
+    
 end
