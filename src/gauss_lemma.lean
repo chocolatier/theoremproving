@@ -4,8 +4,9 @@ import order.bounded_lattice
 import ring_theory.localization
 import data.set
 import data.nat.basic
+import ring_theory.ideals
 
-
+open ideal
 open polynomial
 open classical
 open localization
@@ -69,6 +70,10 @@ end
 
 lemma divisor_of_const_is_const (p q : polynomial α) (hp : is_const p) (hq : q ∣ p) : is_const q := sorry
 
+instance integral_domain_poly_mod (n : α) (hn : irreducible n) : integral_domain ((span ({C n})).quotient) := 
+begin 
+    simp *
+end 
 
 -- Tactic: const divisor (C a) only divides p if a divides all coeffts of p. C a ∣ pq.
 -- If C a ∤ f, then some coefft cᵢ of f, s.t. a ∤ cᵢ. Pick the minimal such cᵢ. Similarly 
@@ -132,11 +137,10 @@ begin
     simp [h_divisor, h_non_unit, hp] -- TODO: There should be some lemma that states non unit q and q ∣ p → reducible q. Find it. 
 end
 
-lemma irred_in_base_imp_irred_in_quot {p : polynomial α} (hp_ir : irreducible p) (hp_nc : ¬is_const p) : irreducible (quot_poly p) := 
+lemma irred_in_base_imp_irred_in_quot {p : polynomial α} (hp_p : primitive p) (hp_ir : irreducible p) (hp_nc : ¬is_const p) : irreducible (quot_poly p) := 
 begin 
-    by_contra hc,
-    have hp : primitive p := irred_imp_prim p hp_ir,
     let p' := quot_poly p,
+    by_contradiction h_contr,
     have h1: ∃(m n : polynomial (quotient_ring α)), (¬ is_unit m) ∧ (¬ is_unit n) ∧ m * n = p', by sorry,
     apply exists.elim h1,
     intros m hm,
@@ -147,10 +151,21 @@ begin
     intros c hc,
     apply exists.elim hc,
     intros d hd,
+    have h2_irred : ∃(c' : α) (d' : polynomial α), (primitive d') ∧ ((C c') * d' = d), by exact has_primitive_factorisation d,
+    apply exists.elim h2_irred,
+    intros c' hc',
+    apply exists.elim hc',
+    intros d' hd',
     have h3: ∃(c₂ : α) (d₂ : polynomial α), quot_poly (C c₂) * n = quot_poly d₂, by exact quot_poly_mult n, 
     apply exists.elim h3,
     intros c₂ hc₂,
     apply exists.elim hc₂,
     intros d₂ hd₂,
+    have h3_irred : ∃(c₂' : α) (d₂' : polynomial α), (primitive d₂') ∧ ((C c₂') * d₂' = d₂), by exact has_primitive_factorisation d₂,
+    apply exists.elim h3_irred,
+    intros c₂' hc₂',
+    apply exists.elim hc₂',
+    intros d₂' hd₂',
+
 
 end
