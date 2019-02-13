@@ -127,6 +127,9 @@ begin
     rw [not_imp, not_not] at hq,
     have h_non_unit_const : _ := and.left hq,
     have h_non_unit : _ := and.right h_non_unit_const,
+    have h_const_divisor : _ := and.right hq,
+    have h_divisor : _ := and.right h_const_divisor,
+    simp [h_divisor, h_non_unit, hp] -- TODO: There should be some lemma that states non unit q and q ∣ p → reducible q. Find it. 
 end
 
 lemma irred_in_base_imp_irred_in_quot {p : polynomial α} (hp_ir : irreducible p) (hp_nc : ¬is_const p) : irreducible (quot_poly p) := 
