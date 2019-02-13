@@ -83,7 +83,7 @@ lemma divisor_of_const_is_const (p q : polynomial α) (hp : is_const p) (hq : q 
 -- α →  α[x]
 -- ↓    ↓
 -- α(n) →α/(n)[x]
-lemma div_pq_imp_div_p_or_q (p q r : polynomial α) (hdiv : r ∣ (p * q)) (hr : irreducible r) : r ∣ p ∨ r ∣ q :=
+lemma div_pq_imp_div_p_or_q (p q : polynomial α) (r: α) (hdiv : C r ∣ (p * q)) (hr : irreducible r) : C r ∣ p ∨  C r ∣ q :=
 begin 
     simp
 end
@@ -97,7 +97,7 @@ begin
     have h_helper : ¬(∀(r : polynomial α), non_unit_const r → ¬const_divisor (p * q) r) , by exact h_pq,
     have h_helper2 : ∃r:polynomial α, ¬(non_unit_const r → ¬const_divisor (p * q) r), by exact not_forall.1 h_helper,
     have h_div : ∃(m : polynomial α), non_unit_const m ∧ const_divisor (p * q) m, by {simp [not_imp, not_not] at h_helper2, exact h_helper2}, 
-    have h_irred_div : ∃(n : polynomial α), ((is_const n) ∧ (irreducible n)) ∧ const_divisor (p * q) n, by sorry, 
+    have h_irred_div : ∃(n : α), (irreducible n) ∧ const_divisor (p * q) (C n), by sorry, 
     apply exists.elim h_irred_div,
     intros n hn,
     have h_n_div : (n ∣ p) ∨ (n ∣ q), by sorry, 
@@ -122,25 +122,5 @@ lemma quot_poly_mult (p : polynomial (quotient_ring α)) : ∃(c : α) (d : poly
 
 lemma irred_in_base_imp_irred_in_quot {p : polynomial α} (hp_p : primitive p) (hp_ir : irreducible p) (hp_nc : ¬is_const p) : irreducible (quot_poly p) := 
 begin 
-    let p' := quot_poly p,
-    by_contradiction h_contr,
-    have h1: ∃(m n : polynomial (quotient_ring α)), (¬ is_unit m) ∧ (¬ is_unit n) ∧ m * n = p', by sorry,
-    apply exists.elim h1,
-    intros m hm,
-    apply exists.elim hm,
-    intros n h_prod, -- ideally both apply and intros should be a single statement
-    have h2: ∃ (c : α) (d : polynomial α), quot_poly (C c) * m = quot_poly d, by exact quot_poly_mult m, 
-    apply exists.elim h2,
-    intros c hc,
-    apply exists.elim hc,
-    intros d hd,
-    have h2_irred : ∃(c' : α) (d' : polynomial α), (primitive d') ∧ ((C c') * d' = d), by exact has_primitive_factorisation d,
-    have h3: ∃(c₂ : α) (d₂ : polynomial α), quot_poly (C c₂) * n = quot_poly d₂, by exact quot_poly_mult n, 
-    apply exists.elim h3,
-    intros c₂ hc₂,
-    apply exists.elim hc₂,
-    intros d₂ hd₂,
-    have h3_irred : ∃(c₂' : α) (d₂' : polynomial α), (primitive d₂') ∧ ((C c₂') * d₂' = d₂), by exact has_primitive_factorisation d₂,
-    
 
 end
