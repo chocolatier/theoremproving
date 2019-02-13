@@ -166,6 +166,11 @@ begin
     intros c₂' hc₂',
     apply exists.elim hc₂',
     intros d₂' hd₂',
-
-
+    have h4 : quot_poly (C c₂) * n * quot_poly (C c) * m = quot_poly d₂ * quot_poly d, by sorry, 
+    have h5 : m * n = quot_poly d₂ * quot_poly d * (1/quot_poly (C c)) * (1/quot_poly (C c₂)), by sorry,
+    have h6 : quot_poly p = quot_poly d₂ * quot_poly d * (1/quot_poly (C c)) * (1/quot_poly (C c₂)), by sorry,
+    have h7 : quot_poly p = quot_poly (d * d₂) *  (1/quot_poly (C c)) * (1/quot_poly (C c₂)), by sorry,
+    -- LHS has integer coeffts, RHS has integer coeffts.
+    -- p is primitive, d,d₂ are primtive. So if  (1/quot_poly (C c)) * (1/quot_poly (C c₂)) ≠ 1 contradiction. 
+    -- if = 1, then produced a factorisation for p. contradiction. 
 end
