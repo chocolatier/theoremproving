@@ -135,5 +135,22 @@ end
 lemma irred_in_base_imp_irred_in_quot {p : polynomial α} (hp_ir : irreducible p) (hp_nc : ¬is_const p) : irreducible (quot_poly p) := 
 begin 
     by_contra hc,
-    
+    have hp : primitive p := irred_imp_prim p hp_ir,
+    let p' := quot_poly p,
+    have h1: ∃(m n : polynomial (quotient_ring α)), (¬ is_unit m) ∧ (¬ is_unit n) ∧ m * n = p', by sorry,
+    apply exists.elim h1,
+    intros m hm,
+    apply exists.elim hm,
+    intros n h_prod, -- ideally both apply and intros should be a single statement
+    have h2: ∃ (c : α) (d : polynomial α), quot_poly (C c) * m = quot_poly d, by exact quot_poly_mult m, 
+    apply exists.elim h2,
+    intros c hc,
+    apply exists.elim hc,
+    intros d hd,
+    have h3: ∃(c₂ : α) (d₂ : polynomial α), quot_poly (C c₂) * n = quot_poly d₂, by exact quot_poly_mult n, 
+    apply exists.elim h3,
+    intros c₂ hc₂,
+    apply exists.elim hc₂,
+    intros d₂ hd₂,
+
 end
