@@ -55,7 +55,7 @@ begin
     sorry
 end
 
-lemma c_irred_iff_a_irred (a : α) : irreducible a ↔ irreducible (C a) := sorry
+lemma c_irred_iff_irred (a : α) : irreducible a ↔ irreducible (C a) := sorry
 
 -- Tactic : Argue on degree. If m ∣ n, deg m < deg n or deg m = deg n = 0. deg bottoms out, and if m is const
 -- use UFD-ness of α to argue irreducible factorization. 
