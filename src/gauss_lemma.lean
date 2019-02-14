@@ -164,7 +164,7 @@ begin
     intros d₂' hd₂',
     have h4 : quot_poly (C c₂) * n * quot_poly (C c) * m = quot_poly d₂ * quot_poly d, by sorry, -- simp
     have h5 : m * n = quot_poly d₂ * quot_poly d *  C (has_inv.inv (to_quot c)) * C (has_inv.inv (to_quot c₂)), by sorry, --simp
-    -- have h6 : quot_poly p = quot_poly d₂ * quot_poly d * C (has_inv.inv (to_quot (c * c₂))), by rwa h_prod.right.right at h5, -- including this line causes a deterministic timeout
+    -- have h6 : quot_poly p = quot_poly d₂ * quot_poly d * C (has_inv.inv (to_quot (c * c₂))), by {rw h_prod.right.right at h5, exact h5}, -- including this line causes a deterministic timeout
     have h7 : quot_poly p = quot_poly (d' * d₂') *  C (has_inv.inv (to_quot (c' * c₂'))), by sorry, -- simp/coe of h6 - shouldn't matter if we coe along poly first or to quot first.
     -- LHS has integer coeffts, so RHS has integer coeffts.
     -- p is primitive, d',d₂' are primtive. So if  (1/quot_poly (C c)) * (1/quot_poly (C c₂)) ≠ 1 contradiction. 
