@@ -70,11 +70,6 @@ end
 
 lemma divisor_of_const_is_const (p q : polynomial α) (hp : is_const p) (hq : q ∣ p) : is_const q := sorry
 
-instance integral_domain_poly_mod (n : α) (hn : irreducible n) : integral_domain ((span ({C n})).quotient) := 
-begin 
-    simp *
-end 
-
 -- Tactic: const divisor (C a) only divides p if a divides all coeffts of p. C a ∣ pq.
 -- If C a ∤ f, then some coefft cᵢ of f, s.t. a ∤ cᵢ. Pick the minimal such cᵢ. Similarly 
 -- if C a ∤ g, then there exists coefft dⱼ of g, s.t. a ∤ dⱼ. coefft k of x^(i+j) will 
@@ -137,11 +132,12 @@ begin
     simp [h_divisor, h_non_unit, hp] -- TODO: There should be some lemma that states non unit q and q ∣ p → reducible q. Find it. 
 end
 
-lemma irred_in_base_imp_irred_in_quot {p : polynomial α} (hp_p : primitive p) (hp_ir : irreducible p) (hp_nc : ¬is_const p) : irreducible (quot_poly p) := 
+-- deterministic time out for some reason now
+lemma irred_in_base_imp_irred_in_quot {p : polynomial α} (hp_ir : irreducible p) (hp_nc : ¬is_const p) : irreducible (quot_poly p) := 
 begin 
     let p' := quot_poly p,
     by_contradiction h_contr,
-    have h1: ∃(m n : polynomial (quotient_ring α)), (¬ is_unit m) ∧ (¬ is_unit n) ∧ m * n = p', by sorry,
+    have h1: ∃(m n : polynomial (quotient_ring α)), (¬ is_unit m) ∧ (¬ is_unit n) ∧ m * n = p', by sorry, -- by h_contr
     apply exists.elim h1,
     intros m hm,
     apply exists.elim hm,
@@ -166,11 +162,24 @@ begin
     intros c₂' hc₂',
     apply exists.elim hc₂',
     intros d₂' hd₂',
-    have h4 : quot_poly (C c₂) * n * quot_poly (C c) * m = quot_poly d₂ * quot_poly d, by sorry, 
-    have h5 : m * n = quot_poly d₂ * quot_poly d * (1/quot_poly (C c)) * (1/quot_poly (C c₂)), by sorry,
-    have h6 : quot_poly p = quot_poly d₂ * quot_poly d * (1/quot_poly (C c)) * (1/quot_poly (C c₂)), by sorry,
-    have h7 : quot_poly p = quot_poly (d * d₂) *  (1/quot_poly (C c)) * (1/quot_poly (C c₂)), by sorry,
-    -- LHS has integer coeffts, RHS has integer coeffts.
+    have h4 : quot_poly (C c₂) * n * quot_poly (C c) * m = quot_poly d₂ * quot_poly d, by sorry, -- simp
+    have h5 : m * n = quot_poly d₂ * quot_poly d *  C (has_inv.inv (to_quot c)) * C (has_inv.inv (to_quot c₂)), by sorry, --simp
+    have h6 : quot_poly p = quot_poly d₂ * quot_poly d * C (has_inv.inv (to_quot (c * c₂))), by rwa h_prod.right.right at h5, 
+    have h7 : quot_poly p = quot_poly (d * d₂) *  C (has_inv.inv (to_quot (c * c₂))), by sorry, -- simp/coe - shouldn't matter if we coe along poly first or to quot first.
+    -- LHS has integer coeffts, so RHS has integer coeffts.
     -- p is primitive, d,d₂ are primtive. So if  (1/quot_poly (C c)) * (1/quot_poly (C c₂)) ≠ 1 contradiction. 
     -- if = 1, then produced a factorisation for p. contradiction. 
+    cases em (is_unit (c * c₂)),
+        -- Case 1
+        have h_const : ∃(k : α), (to_quot k) = has_inv.inv (to_quot (c * c₂)), by sorry, -- by to_quot inv (c * c₂) = int to_quot (c * c₂) coe lemma
+        apply exists.elim h_const,
+        intros k hk,
+        have h8 : quot_poly p = quot_poly (d * d₂) * C (to_quot k), by rwa ←hk at h7,
+        have h8' : quot_poly p = quot_poly (d * d₂) * quot_poly (C k), by sorry, -- Simplifier
+        have h9 : quot_poly p = quot_poly(d * (C k) * d₂), by sorry, -- Simplifier
+        have h10 : p = d * ((C k) * d₂), by sorry, -- coe lemma
+        have h10' : ¬irreducible p, by sorry,
+        show false, from h10' hp_ir,
+        sorry,
+        -- case 2 
 end
