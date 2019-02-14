@@ -129,7 +129,10 @@ begin
     have h_non_unit : _ := and.right h_non_unit_const,
     have h_const_divisor : _ := and.right hq,
     have h_divisor : _ := and.right h_const_divisor,
-    simp [h_divisor, h_non_unit, hp] -- TODO: There should be some lemma that states non unit q and q ∣ p → reducible q. Find it. 
+-- Prove the final step as a separate lemma, starting with:    
+-- dsimp [irreducible] at hp,
+
+    -- simp [h_divisor, h_non_unit, hp] -- TODO: There should be some lemma that states non unit q and q ∣ p → reducible q. Find it. 
 end
 
 -- deterministic time out for some reason now
@@ -147,7 +150,8 @@ begin
     intros c hc,
     apply exists.elim hc,
     intros d hd,
-    have h2_irred : ∃(c' : α) (d' : polynomial α), (primitive d') ∧ ((C c') * d' = d), by exact has_primitive_factorisation d,
+    -- rcases has_primitive_factorisation d with ⟨c', d', primd, rfl⟩,
+    have h2_irred : ∃(c' : α) (d' : polynomial α), (primitive d') ∧ ((C c') * d' = d) := has_primitive_factorisation d,
     apply exists.elim h2_irred,
     intros c' hc',
     apply exists.elim hc',
