@@ -185,5 +185,5 @@ begin
         have h_p_coeff : ∀ (n : ℕ), coeff p' n = to_quot (coeff p n), by sorry, 
         have h_p_coeff' : ∀(n: ℕ), coeff (quot_poly (d' * d₂') *  C (has_inv.inv (to_quot (c' * c₂')))) n = to_quot (coeff p n), by sorry,
         have h_coeff : ∀(n : ℕ), coeff (quot_poly (d' * d₂') *  C (has_inv.inv (to_quot (c' * c₂')))) n = coeff (quot_poly (d' * d₂')) n * has_inv.inv (to_quot (c' * c₂')), by sorry,
-        have h_d_d2_prim : primitive (d * d₂), by exact (prod_of_prim_is_prim (d * d₂))
+        have h_d_d2_prim : primitive (d' * d₂'), by exact (prod_of_prim_is_prim d' d₂' (and.intro (hd'.left) (hd₂'.left)))
 end
