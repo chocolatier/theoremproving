@@ -44,7 +44,7 @@ def const_divisor : Π (p q : polynomial α),  Prop
 
 def primitive (p : polynomial α) : Prop := ∀(q : polynomial α), non_unit_const q → ¬const_divisor p q
 
--- Subring of constant polynomials α is isomorphic to α. Manual unfolds/rws seem the wrong approach. 
+-- Subring of constant polynomials α is isomorphic to α. Manual unfolds/rws or producing an explicit divisor seem the wrong approach. 
 lemma c_div_if_div (a b : α) : a ∣ b → (C a) ∣ (C b) := 
 begin
     sorry
@@ -164,8 +164,8 @@ begin
     intros d₂' hd₂',
     have h4 : quot_poly (C c₂) * n * quot_poly (C c) * m = quot_poly d₂ * quot_poly d, by sorry, -- simp
     have h5 : m * n = quot_poly d₂ * quot_poly d *  C (has_inv.inv (to_quot c)) * C (has_inv.inv (to_quot c₂)), by sorry, --simp
-    have h6 : quot_poly p = quot_poly d₂ * quot_poly d * C (has_inv.inv (to_quot (c * c₂))), by rwa h_prod.right.right at h5, 
-    have h7 : quot_poly p = quot_poly (d * d₂) *  C (has_inv.inv (to_quot (c * c₂))), by sorry, -- simp/coe - shouldn't matter if we coe along poly first or to quot first.
+    -- have h6 : quot_poly p = quot_poly d₂ * quot_poly d * C (has_inv.inv (to_quot (c * c₂))), by rwa h_prod.right.right at h5, -- including this line causes a deterministic timeout
+    have h7 : quot_poly p = quot_poly (d * d₂) *  C (has_inv.inv (to_quot (c * c₂))), by sorry, -- simp/coe of h6 - shouldn't matter if we coe along poly first or to quot first.
     -- LHS has integer coeffts, so RHS has integer coeffts.
     -- p is primitive, d,d₂ are primtive. So if  (1/quot_poly (C c)) * (1/quot_poly (C c₂)) ≠ 1 contradiction. 
     -- if = 1, then produced a factorisation for p. contradiction. 
