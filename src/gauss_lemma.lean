@@ -4,7 +4,6 @@ import order.bounded_lattice
 import ring_theory.localization
 import data.set
 import data.nat.basic
-import ring_theory.ideals
 
 open ideal
 open polynomial
@@ -135,66 +134,91 @@ begin
     -- simp [h_divisor, h_non_unit, hp] -- TODO: There should be some lemma that states non unit q and q ∣ p → reducible q. Find it. 
 end
 
--- deterministic time out for some reason now
-lemma irred_in_base_imp_irred_in_quot {p : polynomial α} (hp_ir : irreducible p) (hp_nc : ¬is_const p) : irreducible (quot_poly p) := 
+lemma not_irred_imp_non_unit_divisors {p : polynomial α} (hp : ¬irreducible p) (hp' : ¬is_unit p) : ∃(m n : polynomial α),   p = m * n  ∧ (¬ is_unit m) ∧ (¬ is_unit n) :=
 begin 
-    let p' := quot_poly p,
-    by_contradiction h_contr,
-    have h1: ∃(m n : polynomial (quotient_ring α)), (¬ is_unit m) ∧ (¬ is_unit n) ∧ m * n = p', by sorry, -- by h_contr
-    apply exists.elim h1,
-    intros m hm,
-    apply exists.elim hm,
-    intros n h_prod, -- ideally both apply and intros should be a single statement
-    have h2: ∃ (c : α) (d : polynomial α), quot_poly (C c) * m = quot_poly d, by exact quot_poly_mult m, 
-    apply exists.elim h2,
-    intros c hc,
-    apply exists.elim hc,
-    intros d hd,
-    -- rcases has_primitive_factorisation d with ⟨c', d', primd, rfl⟩,
-    have h2_irred : ∃(c' : α) (d' : polynomial α), (primitive d') ∧ ((C c') * d' = d) := has_primitive_factorisation d,
-    apply exists.elim h2_irred,
-    intros c' hc',
-    apply exists.elim hc',
-    intros d' hd',
-    have h3: ∃(c₂ : α) (d₂ : polynomial α), quot_poly (C c₂) * n = quot_poly d₂, by exact quot_poly_mult n, 
-    apply exists.elim h3,
-    intros c₂ hc₂,
-    apply exists.elim hc₂,
-    intros d₂ hd₂,
-    have h3_irred : ∃(c₂' : α) (d₂' : polynomial α), (primitive d₂') ∧ ((C c₂') * d₂' = d₂), by exact has_primitive_factorisation d₂,
-    apply exists.elim h3_irred,
-    intros c₂' hc₂',
-    apply exists.elim hc₂',
-    intros d₂' hd₂',
-    have h4 : quot_poly (C c₂) * n * quot_poly (C c) * m = quot_poly d₂ * quot_poly d, by sorry, -- simp
-    have h5 : m * n = quot_poly d₂ * quot_poly d *  C (has_inv.inv (to_quot c)) * C (has_inv.inv (to_quot c₂)), by sorry, --simp
-    -- have h6 : quot_poly p = quot_poly d₂ * quot_poly d * C (has_inv.inv (to_quot (c * c₂))), by {rw h_prod.right.right at h5, exact h5}, -- including this line causes a deterministic timeout
-    have h7 : quot_poly p = quot_poly (d' * d₂') *  C (has_inv.inv (to_quot (c' * c₂'))), by sorry, -- simp/coe of h6 - shouldn't matter if we coe along poly first or to quot first.
-    -- LHS has integer coeffts, so RHS has integer coeffts.
-    -- p is primitive, d',d₂' are primtive. So if  (1/quot_poly (C c)) * (1/quot_poly (C c₂)) ≠ 1 contradiction. 
-    -- if = 1, then produced a factorisation for p. contradiction. 
-    cases em (is_unit (c * c₂)),
-        -- Case 1
-        have h_const : ∃(k : α), (to_quot k) = has_inv.inv (to_quot (c' * c₂')), by sorry, -- by to_quot inv (c * c₂) = int to_quot (c * c₂) coe lemma
-        apply exists.elim h_const,
-        intros k hk,
-        have h8 : quot_poly p = quot_poly (d' * d₂') * C (to_quot k), by rwa ←hk at h7,
-        have h8' : quot_poly p = quot_poly (d' * d₂') * quot_poly (C k), by sorry, -- Simplifier
-        have h9 : quot_poly p = quot_poly(d' * (C k) * d₂'), by sorry, -- Simplifier
-        have h10 : p = d * ((C k) * d₂'), by sorry, -- coe lemma
-        have h10' : ¬irreducible p, by sorry, -- as in irred_imp_prim, have witness for reduciblilty
-        show false, from h10' hp_ir,
-        -- case 2 
-        have h_coeff_eq : ∀(n : ℕ), coeff p' n = coeff (quot_poly (d' * d₂') *  C (has_inv.inv (to_quot (c' * c₂')))) n, by sorry,
-        have h_p_coeff : ∀ (n : ℕ), coeff p' n = to_quot (coeff p n), by sorry, 
-        have h_p_coeff' : ∀(n: ℕ), coeff (quot_poly (d' * d₂') *  C (has_inv.inv (to_quot (c' * c₂')))) n = to_quot (coeff p n), by sorry,
-        have h_coeff : ∀(n : ℕ), coeff (quot_poly (d' * d₂') *  C (has_inv.inv (to_quot (c' * c₂')))) n = coeff (quot_poly (d' * d₂')) n * has_inv.inv (to_quot (c' * c₂')), by sorry,
-        have h_d_d2_prim : primitive (d' * d₂'), by exact (prod_of_prim_is_prim d' d₂' (and.intro (hd'.left) (hd₂'.left))),
-        have h8 : ∀(n : ℕ), coeff p' n =  coeff (quot_poly (d' * d₂')) n * has_inv.inv (to_quot (c' * c₂')), by sorry, 
-        have h9 : ∀(n : ℕ), to_quot (coeff p n) = coeff (quot_poly (d' * d₂')) n * has_inv.inv (to_quot (c' * c₂')), by sorry, 
-        have h9' : ∀(n : ℕ), to_quot (c' * c₂') * to_quot (coeff p n) = coeff (quot_poly (d' * d₂')) n, by sorry,
-        have h10 : ∀(n : ℕ), to_quot (c' * c₂' * coeff p n) = coeff (quot_poly (d' * d₂')) n, by sorry, 
-        have h11 : ∀(n : ℕ), c' * c₂' ∣ coeff (d' * d₂'), by sorry, 
-        have h12 : ¬primitive (d' * d₂'), by sorry,
-        show false, from h_d_d2_prim h12
+    unfold irreducible at hp,
+    rw [not_and_distrib, not_not, not_forall] at hp,
+    simp [hp'] at hp,
+    simp [not_forall,not_imp,not_or_distrib] at hp,
+    exact hp
 end
+
+lemma non_const_imp_non_unit {p : polynomial α} (hp : ¬is_const p) : ¬is_unit p := 
+begin 
+by_contradiction hc,
+have h1 : _ := degree_eq_zero_of_is_unit hc,
+have h2 : _ := not_const_imp_non_zero hp,
+have h3 : _ := degree_eq_nat_degree h2,
+have h4 : _ := 0 = nat_degree p, by {rw h1 at h3}
+end
+
+lemma irred_in_base_imp_irred_in_quot {p : polynomial α} (hp_ir : irreducible p) (hp_nc : ¬is_const p) : irreducible (quot_poly p) :=
+begin 
+    by_contradiction h_contr, 
+    have h1: ∃(m n : polynomial (quotient_ring α)), (¬ is_unit m) ∧ (¬ is_unit n) ∧ m * n = quot_poly p := not_irred_imp_non_unit_divisors h_contr (non_const_imp_non_unit hp_nc)
+end 
+
+
+-- -- deterministic time out for some reason now
+-- lemma irred_in_base_imp_irred_in_quot' {p : polynomial α} (hp_ir : irreducible p) (hp_nc : ¬is_const p) : irreducible (quot_poly p) := 
+-- begin 
+--     let p' := quot_poly p,
+--     by_contradiction h_contr,
+--     have h1: ∃(m n : polynomial (quotient_ring α)), (¬ is_unit m) ∧ (¬ is_unit n) ∧ m * n = p', by sorry, -- by h_contr
+--     apply exists.elim h1,
+--     intros m hm,
+--     apply exists.elim hm,
+--     intros n h_prod, -- ideally both apply and intros should be a single statement
+--     have h2: ∃ (c : α) (d : polynomial α), quot_poly (C c) * m = quot_poly d, by exact quot_poly_mult m, 
+--     apply exists.elim h2,
+--     intros c hc,
+--     apply exists.elim hc,
+--     intros d hd,
+--     -- rcases has_primitive_factorisation d with ⟨c', d', primd, rfl⟩,
+--     have h2_irred : ∃(c' : α) (d' : polynomial α), (primitive d') ∧ ((C c') * d' = d) := has_primitive_factorisation d,
+--     apply exists.elim h2_irred,
+--     intros c' hc',
+--     apply exists.elim hc',
+--     intros d' hd',
+--     have h3: ∃(c₂ : α) (d₂ : polynomial α), quot_poly (C c₂) * n = quot_poly d₂, by exact quot_poly_mult n, 
+--     apply exists.elim h3,
+--     intros c₂ hc₂,
+--     apply exists.elim hc₂,
+--     intros d₂ hd₂,
+--     have h3_irred : ∃(c₂' : α) (d₂' : polynomial α), (primitive d₂') ∧ ((C c₂') * d₂' = d₂), by exact has_primitive_factorisation d₂,
+--     apply exists.elim h3_irred,
+--     intros c₂' hc₂',
+--     apply exists.elim hc₂',
+--     intros d₂' hd₂',
+--     have h4 : quot_poly (C c₂) * n * quot_poly (C c) * m = quot_poly d₂ * quot_poly d, by sorry, -- simp
+--     have h5 : m * n = quot_poly d₂ * quot_poly d *  C (has_inv.inv (to_quot c)) * C (has_inv.inv (to_quot c₂)), by sorry, --simp
+--     -- have h6 : quot_poly p = quot_poly d₂ * quot_poly d * C (has_inv.inv (to_quot (c * c₂))), by {rw h_prod.right.right at h5, exact h5}, -- including this line causes a deterministic timeout
+--     have h7 : quot_poly p = quot_poly (d' * d₂') *  C (has_inv.inv (to_quot (c' * c₂'))), by sorry, -- simp/coe of h6 - shouldn't matter if we coe along poly first or to quot first.
+--     -- LHS has integer coeffts, so RHS has integer coeffts.
+--     -- p is primitive, d',d₂' are primtive. So if  (1/quot_poly (C c)) * (1/quot_poly (C c₂)) ≠ 1 contradiction. 
+--     -- if = 1, then produced a factorisation for p. contradiction. 
+--     cases em (is_unit (c * c₂)),
+--         -- Case 1
+--         have h_const : ∃(k : α), (to_quot k) = has_inv.inv (to_quot (c' * c₂')), by sorry, -- by to_quot inv (c * c₂) = int to_quot (c * c₂) coe lemma
+--         apply exists.elim h_const,
+--         intros k hk,
+--         have h8 : quot_poly p = quot_poly (d' * d₂') * C (to_quot k), by rwa ←hk at h7,
+--         have h8' : quot_poly p = quot_poly (d' * d₂') * quot_poly (C k), by sorry, -- Simplifier
+--         have h9 : quot_poly p = quot_poly(d' * (C k) * d₂'), by sorry, -- Simplifier
+--         have h10 : p = d * ((C k) * d₂'), by sorry, -- coe lemma
+--         have h10' : ¬irreducible p, by sorry, -- as in irred_imp_prim, have witness for reduciblilty
+--         show false, from h10' hp_ir,
+--         -- case 2 
+--         have h_coeff_eq : ∀(n : ℕ), coeff p' n = coeff (quot_poly (d' * d₂') *  C (has_inv.inv (to_quot (c' * c₂')))) n, by sorry,
+--         have h_p_coeff : ∀ (n : ℕ), coeff p' n = to_quot (coeff p n), by sorry, 
+--         have h_p_coeff' : ∀(n: ℕ), coeff (quot_poly (d' * d₂') *  C (has_inv.inv (to_quot (c' * c₂')))) n = to_quot (coeff p n), by sorry,
+--         have h_coeff : ∀(n : ℕ), coeff (quot_poly (d' * d₂') *  C (has_inv.inv (to_quot (c' * c₂')))) n = coeff (quot_poly (d' * d₂')) n * has_inv.inv (to_quot (c' * c₂')), by sorry,
+--         have h_d_d2_prim : primitive (d' * d₂'), by exact (prod_of_prim_is_prim d' d₂' (and.intro (hd'.left) (hd₂'.left))),
+--         have h8 : ∀(n : ℕ), coeff p' n =  coeff (quot_poly (d' * d₂')) n * has_inv.inv (to_quot (c' * c₂')), by sorry, 
+--         have h9 : ∀(n : ℕ), to_quot (coeff p n) = coeff (quot_poly (d' * d₂')) n * has_inv.inv (to_quot (c' * c₂')), by sorry, 
+--         have h9' : ∀(n : ℕ), to_quot (c' * c₂') * to_quot (coeff p n) = coeff (quot_poly (d' * d₂')) n, by sorry,
+--         have h10 : ∀(n : ℕ), to_quot (c' * c₂' * coeff p n) = coeff (quot_poly (d' * d₂')) n, by sorry, 
+--         have h11 : ∀(n : ℕ), c' * c₂' ∣ coeff (d' * d₂') n, by sorry, 
+--         have h12 : ¬primitive (d' * d₂'), by sorry,
+--         show false, from h_d_d2_prim h12
+-- end
