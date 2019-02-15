@@ -25,7 +25,7 @@ variable [has_mod α]
 
 -- set_option pp.all true
 
-def is_const (p : polynomial α) : Prop := nat_degree p = 0 
+def is_const {γ : Type*} [comm_semiring γ] [decidable_eq γ] (p : polynomial γ) : Prop := nat_degree p = 0
 
 instance is_const.decidable : decidable (is_const p) :=
 by unfold is_const; apply_instance
@@ -149,13 +149,14 @@ by_contradiction hc,
 have h1 : _ := degree_eq_zero_of_is_unit hc,
 have h2 : _ := not_const_imp_non_zero hp,
 have h3 : _ := degree_eq_nat_degree h2,
-have h4 : _ := 0 = nat_degree p, by {rw h1 at h3}
+have h4 : _ := 0 = nat_degree p, by sorry -- rwing fails here?
 end
 
 lemma irred_in_base_imp_irred_in_quot {p : polynomial α} (hp_ir : irreducible p) (hp_nc : ¬is_const p) : irreducible (quot_poly p) :=
 begin 
     by_contradiction h_contr, 
-    have h1: ∃(m n : polynomial (quotient_ring α)), (¬ is_unit m) ∧ (¬ is_unit n) ∧ m * n = quot_poly p := not_irred_imp_non_unit_divisors h_contr (non_const_imp_non_unit hp_nc)
+    have h0 : ¬ is_const (quot_poly p), by sorry,
+    have h1: ∃(m n : polynomial (quotient_ring α)), (¬ is_unit m) ∧ (¬ is_unit n) ∧ m * n = quot_poly p := not_irred_imp_non_unit_divisors h_contr h0
 end 
 
 
