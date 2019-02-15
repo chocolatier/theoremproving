@@ -134,7 +134,7 @@ begin
     -- simp [h_divisor, h_non_unit, hp] -- TODO: There should be some lemma that states non unit q and q ∣ p → reducible q. Find it. 
 end
 
-lemma not_irred_imp_non_unit_divisors  {γ : Type*} [monoid γ] [decidable_eq γ] (p : γ) (hp : ¬irreducible p) (hp' : ¬is_unit p) : ∃(m n : γ),   p = m * n  ∧ (¬ is_unit m) ∧ (¬ is_unit n) :=
+lemma not_irred_imp_non_unit_divisors  {γ : Type*} [monoid γ] [decidable_eq γ] {p : γ} (hp : ¬irreducible p) (hp' : ¬is_unit p) : ∃(m n : γ),   p = m * n  ∧ (¬ is_unit m) ∧ (¬ is_unit n) :=
 begin 
     unfold irreducible at hp,
     rw [not_and_distrib, not_not, not_forall] at hp,
@@ -155,8 +155,9 @@ end
 lemma irred_in_base_imp_irred_in_quot {p : polynomial α} (hp_ir : irreducible p) (hp_nc : ¬is_const p) : irreducible (quot_poly p) :=
 begin 
     by_contradiction h_contr, 
-    have h0 : ¬ is_const (quot_poly p), by sorry,
-    have h1: ∃(m n : polynomial (quotient_ring α)), (¬ is_unit m) ∧ (¬ is_unit n) ∧ m * n = quot_poly p := not_irred_imp_non_unit_divisors h_contr h0
+    have h0 : ¬ is_unit (quot_poly p), by sorry,
+    have h1: ∃ (m n : polynomial (quotient_ring α)), quot_poly p = m * n ∧ ¬is_unit m ∧ ¬is_unit n := not_irred_imp_non_unit_divisors h_contr h0, 
+    sorry
 end 
 
 
