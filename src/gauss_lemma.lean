@@ -17,6 +17,7 @@ local attribute [instance, priority 0] classical.prop_decidable
 universe u 
 
 variables {α : Type u} {a: α}  
+variables {γ : Type u} [comm_semiring γ] [decidable_eq γ] [integral_domain γ] [unique_factorization_domain γ] 
 
 variables [integral_domain α] {p q r s : polynomial α}
 variable [decidable_eq α]
@@ -134,7 +135,7 @@ begin
     -- simp [h_divisor, h_non_unit, hp] -- TODO: There should be some lemma that states non unit q and q ∣ p → reducible q. Find it. 
 end
 
-lemma not_irred_imp_non_unit_divisors  {γ : Type*} [monoid γ] [decidable_eq γ] {p : γ} (hp : ¬irreducible p) (hp' : ¬is_unit p) : ∃(m n : γ),   p = m * n  ∧ (¬ is_unit m) ∧ (¬ is_unit n) :=
+lemma not_irred_imp_non_unit_divisors {γ : Type*} [monoid γ] [decidable_eq γ] {p : γ} (hp : ¬irreducible p) (hp' : ¬is_unit p) : ∃(m n : γ),   p = m * n  ∧ (¬ is_unit m) ∧ (¬ is_unit n) :=
 begin 
     unfold irreducible at hp,
     rw [not_and_distrib, not_not, not_forall] at hp,
@@ -143,19 +144,27 @@ begin
     exact hp
 end
 
-lemma non_const_imp_non_unit {p : polynomial α} (hp : ¬is_const p) : ¬is_unit p := 
+lemma test {a : polynomial γ} (ha : is_unit a) : degree a = 0 := 
 begin 
-by_contradiction hc,
-have h1 : _ := degree_eq_zero_of_is_unit hc,
-have h2 : _ := not_const_imp_non_zero hp,
-have h3 : _ := degree_eq_nat_degree h2,
-have h4 : _ := 0 = nat_degree p, by sorry -- rwing fails here?
+    have h0 : _ := degree_eq_zero_of_is_unit ha
 end
+
+lemma non_const_imp_non_unit {p : polynomial γ} (hp : ¬is_const p) : ¬is_unit p := 
+begin 
+    by_contradiction hc,
+    have h1 : _ := degree_eq_zero_of_is_unit hc,
+    have h2 : _ := not_const_imp_non_zero hp,
+    have h3 : _ := degree_eq_nat_degree h2,
+    have h4 : _ := 0 = nat_degree p, by sorry -- rwing fails here?
+end
+
+lemma const_iff_quot_poly_const {p : polynomial α} : is_const p ↔ is_const (quot_poly p) := sorry
 
 lemma irred_in_base_imp_irred_in_quot {p : polynomial α} (hp_ir : irreducible p) (hp_nc : ¬is_const p) : irreducible (quot_poly p) :=
 begin 
     by_contradiction h_contr, 
-    have h0 : ¬ is_unit (quot_poly p), by sorry,
+    have h_not_quot_poly_const : ¬is_const (quot_poly p) := sorry, 
+    have h0 : ¬ is_unit (quot_poly p) := non_const_imp_non_unit h_not_quot_poly_const,
     have h1: ∃ (m n : polynomial (quotient_ring α)), quot_poly p = m * n ∧ ¬is_unit m ∧ ¬is_unit n := not_irred_imp_non_unit_divisors h_contr h0, 
     sorry
 end 
