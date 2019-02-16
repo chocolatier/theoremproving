@@ -144,12 +144,7 @@ begin
     exact hp
 end
 
-lemma test {a : polynomial γ} (ha : is_unit a) : degree a = 0 := 
-begin 
-    have h0 : _ := degree_eq_zero_of_is_unit ha
-end
-
-lemma non_const_imp_non_unit {p : polynomial γ} (hp : ¬is_const p) : ¬is_unit p := 
+lemma non_const_imp_non_unit [integral_domain γ] {p : polynomial γ} (hp : ¬is_const p) : ¬is_unit p := 
 begin 
     by_contradiction hc,
     have h1 : _ := degree_eq_zero_of_is_unit hc,
