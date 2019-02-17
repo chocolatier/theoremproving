@@ -59,7 +59,7 @@ lemma c_irred_iff_irred (a : α) : irreducible a ↔ irreducible (C a) := sorry
 
 -- Tactic : Argue on degree. If m ∣ n, deg m < deg n or deg m = deg n = 0. deg bottoms out, and if m is const
 -- use UFD-ness of α to argue irreducible factorization. 
-lemma div_imp_irred_div (p m : polynomial α) (hm : m ∣ p) : ∃(n : polynomial α), (irreducible n) ∧ n ∣ p := 
+lemma div_imp_irred_div (p m : polynomial α) (hm : m ∣ p) (hm' : ¬is_unit m) : ∃(n : polynomial α), (irreducible n) ∧ n ∣ p := 
 begin
     sorry
 end
