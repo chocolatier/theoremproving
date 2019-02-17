@@ -61,7 +61,10 @@ lemma c_irred_iff_irred (a : α) : irreducible a ↔ irreducible (C a) := sorry
 -- use UFD-ness of α to argue irreducible factorization. 
 lemma div_imp_irred_div (p m : polynomial α) (hm : m ∣ p) (hm' : ¬is_unit m) : ∃(n : polynomial α), (irreducible n) ∧ n ∣ p := 
 begin
-    sorry
+    cases em (irreducible m),
+    have h_and : _ := and.intro h hm,
+    apply exists.intro m h_and,
+    
 end
 
 lemma divisor_of_const_is_const (p q : polynomial α) (hp : is_const p) (hq : q ∣ p) : is_const q := sorry
