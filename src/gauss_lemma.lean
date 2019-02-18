@@ -109,8 +109,6 @@ def quot_poly (p : polynomial α) : polynomial (quotient_ring α) := p.map to_qu
 -- set c = gcd coeffts. 
 lemma has_primitive_factorisation (p : polynomial α) : ∃(c : α) (p' : polynomial α), primitive p' ∧ C c * p' = p := sorry       
 
--- Not sure how to approach this. Normal proof is just multiplying through by the lcm of the denominators of the coeffts in 
--- reduced form. But I've failed to find the notion of a reduced form. 
 lemma quot_poly_mult (p : polynomial (quotient_ring α)) : ∃(c : α) (d : polynomial α), quot_poly (C c) * p = quot_poly d := sorry 
 
 lemma irred_imp_prim (p : polynomial α) (hp : irreducible p): primitive p :=  
