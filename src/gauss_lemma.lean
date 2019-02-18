@@ -152,7 +152,7 @@ lemma irred_in_base_imp_irred_in_quot {p : polynomial α} (hp_ir : irreducible p
 begin 
     by_contradiction h_contr, 
     have h_not_quot_poly_const : ¬is_const (quot_poly p) := sorry, 
-    have h0 : ¬ is_unit (quot_poly p) := non_const_imp_non_unit h_not_quot_poly_const,
+    have h0 : ¬ is_unit (quot_poly p) := sorry,
     have h1: ∃ (m n : polynomial (quotient_ring α)), quot_poly p = m * n ∧ ¬is_unit m ∧ ¬is_unit n := not_irred_imp_non_unit_divisors h_contr h0, 
     sorry
 end 
