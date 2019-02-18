@@ -102,6 +102,8 @@ end
 
 def to_quot (a : α) : quotient_ring α := ⟦(a, (1 : non_zero_divisors α))⟧
 
+def is_integer (q : quotient_ring α) : Prop := ∃(a : α), to_quot a = q
+
 def quot_poly (p : polynomial α) : polynomial (quotient_ring α) := p.map to_quot
 
 -- set c = gcd coeffts. 
