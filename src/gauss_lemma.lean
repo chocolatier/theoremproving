@@ -45,15 +45,9 @@ def const_divisor : Π (p q : polynomial α),  Prop
 def primitive (p : polynomial α) : Prop := ∀(q : polynomial α), non_unit_const q → ¬const_divisor p q
 
 -- Subring of constant polynomials α is isomorphic to α. Manual unfolds/rws or producing an explicit divisor seem the wrong approach. 
-lemma c_div_if_div (a b : α) : a ∣ b → (C a) ∣ (C b) := 
-begin
-    sorry
-end
+lemma c_div_if_div (a b : α) : a ∣ b → (C a) ∣ (C b) := sorry
 
-lemma c_div_iff_div (a b : α) : a ∣ b ↔ (C a) ∣ (C b) := 
-begin 
-    sorry
-end
+lemma c_div_iff_div (a b : α) : a ∣ b ↔ (C a) ∣ (C b) := sorry
 
 lemma c_irred_iff_irred (a : α) : irreducible a ↔ irreducible (C a) := sorry
 
