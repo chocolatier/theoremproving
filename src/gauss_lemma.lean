@@ -144,7 +144,7 @@ begin
     exact hp
 end
 
-lemma non_const_imp_non_unit [integral_domain γ] {p : polynomial γ} (hp : ¬is_const p) : ¬is_unit p := 
+lemma non_const_imp_non_unit [field γ] {p : polynomial γ} (hp : ¬is_const p) : ¬is_unit p := 
 begin 
     by_contradiction hc,
     have h1 : _ := degree_eq_zero_of_is_unit hc,
