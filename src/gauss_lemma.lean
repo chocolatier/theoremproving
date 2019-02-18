@@ -59,13 +59,12 @@ lemma c_irred_iff_irred (a : α) : irreducible a ↔ irreducible (C a) := sorry
 
 -- Tactic : Argue on degree. If m ∣ n, deg m < deg n or deg m = deg n = 0. deg bottoms out, and if m is const
 -- use UFD-ness of α to argue irreducible factorization. 
-lemma div_imp_irred_div (p m : polynomial α) (hm : m ∣ p) : ∃(n : polynomial α), (irreducible n) ∧ n ∣ p := 
+lemma div_imp_irred_div (p m : polynomial α) (hm : m ∣ p) (hm' : ¬is_unit m) : ∃(n : polynomial α), (irreducible n) ∧ n ∣ p := 
 begin
-    by_contra hc,
-    rw not_exists at hc,
-    -- rw fails, even though we have hc : ∀ (x : polynomial α), ¬(irreducible x ∧ x ∣ p)
-    -- rw not_and at hc, 
-    have h1 : ∀(x : polynomial α), ¬irreducible x ∨ ¬x ∣ p, by {rw [not_and] at hc, exact hc}
+    cases em (irreducible m),
+    have h_and : _ := and.intro h hm,
+    apply exists.intro m h_and,
+    
 end
 
 lemma divisor_of_const_is_const (p q : polynomial α) (hp : is_const p) (hq : q ∣ p) : is_const q := sorry
