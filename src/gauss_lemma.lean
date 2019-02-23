@@ -61,7 +61,14 @@ begin
     
 end
 
-lemma divisor_of_const_is_const (p q : polynomial α) (hp : is_const p) (hq : q ∣ p) : is_const q := sorry
+lemma divisor_of_const_is_const (p q : polynomial α) (hp : is_const p) (hq : q ∣ p) : is_const q := 
+begin 
+    have h1 : degree q ≤ degree p := sorry,
+    have h2 : degree q = 0 := sorry, 
+    have h3 : nat_degree q = 0 := sorry,
+    rw ←is_const at h3,
+    exact h3
+end
 
 -- Tactic: const divisor (C a) only divides p if a divides all coeffts of p. C a ∣ pq.
 -- If C a ∤ f, then some coefft cᵢ of f, s.t. a ∤ cᵢ. Pick the minimal such cᵢ. Similarly 
@@ -76,7 +83,8 @@ lemma divisor_of_const_is_const (p q : polynomial α) (hp : is_const p) (hq : q 
 -- α(n) →α/(n)[x]
 lemma div_pq_imp_div_p_or_q (p q : polynomial α) (r: α) (hdiv : C r ∣ (p * q)) (hr : irreducible r) : C r ∣ p ∨  C r ∣ q :=
 begin 
-    simp
+    have h1: prime r := sorry,
+    have  
 end
 
 lemma prod_of_prim_is_prim (p q : polynomial α) : (primitive p ∧ primitive q) → primitive (p * q) := 
