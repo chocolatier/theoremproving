@@ -17,7 +17,7 @@ local attribute [instance, priority 0] classical.prop_decidable
 universe u 
 
 variables {α : Type u} {a: α}  
-variables {γ : Type u} [comm_semiring γ] [decidable_eq γ] [integral_domain γ] [unique_factorization_domain γ] 
+variables {γ : Type u} [decidable_eq γ] [integral_domain γ] [unique_factorization_domain γ] 
 
 variables [integral_domain α] {p q r s : polynomial α}
 variable [decidable_eq α]
@@ -58,13 +58,15 @@ begin
     cases em (irreducible m),
     have h_and : _ := and.intro h hm,
     apply exists.intro m h_and,
+     
+    by_contradiction hc,
+    rw not_exists at hc,
     
 end
 
 lemma divisor_of_const_is_const (p q : polynomial α) (hp : is_const p) (hq : q ∣ p) : is_const q := 
 begin 
-    have h1 : degree q ≤ degree p := sorry,
-    have h2 : degree q = 0 := sorry, 
+    have h1 : nat_degree q ≤ nat_degree p := sorry,
     have h3 : nat_degree q = 0 := sorry,
     rw ←is_const at h3,
     exact h3
@@ -161,7 +163,16 @@ begin
     by_contradiction h_contr, 
     have h_not_quot_poly_const : ¬is_const (quot_poly p) := sorry, 
     have h0 : ¬ is_unit (quot_poly p) := sorry,
-    have h1: ∃ (m n : polynomial (quotient_ring α)), quot_poly p = m * n ∧ ¬is_unit m ∧ ¬is_unit n := not_irred_imp_non_unit_divisors h_contr h0, 
+    -- ∃(m n : polynomial (quotient_ring α)), (¬ is_unit m) ∧ (¬ is_unit n) ∧ m * n = p'
+    rcases not_irred_imp_non_unit_divisors h_contr h0 with ⟨m, n, p_eq_mn, hc⟩,
+    -- ∃ (c : α) (d : polynomial α), quot_poly (C c) * m = quot_poly d
+    rcases quot_poly_mult m with ⟨c,d,h_cm_eq_d⟩, -- NOTE rfling  h_cm_eq_d produces an error
+    -- ∃(c' : α) (d' : polynomial α), (primitive d') ∧ ((C c') * d' = d)
+    rcases has_primitive_factorisation d with ⟨c', d', primd, rfl⟩,
+    rcases quot_poly_mult n with ⟨c₂,d₂,h_c₂n_eq_d₂⟩, -- NOTE rfling  h_c₂n_eq_d₂ produces an error
+    -- ∃(c₂' : α) (d₂' : polynomial α), (primitive d₂') ∧ ((C c₂') * d₂' = d₂)
+    rcases has_primitive_factorisation d₂ with ⟨c₂', d₂', primd₂, rfl⟩,
+
     sorry
 end 
 
