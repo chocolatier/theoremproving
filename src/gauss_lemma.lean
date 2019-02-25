@@ -4,6 +4,7 @@ import order.bounded_lattice
 import ring_theory.localization
 import data.set
 import data.nat.basic
+import tactic.rewrite
 
 open ideal
 open polynomial
@@ -135,8 +136,8 @@ begin
     simp [haq] at hp',
     cases hp',
     have hc := h_neq' hp',
-    show false, from hc (eq.symm haq),
-    -- show false, from (eq.symm hc) haq fails
+    -- show false, from hc haq.symm,
+    show false, from hc.symm haq,
     show false, from h_non_unit hp'
 end
 
@@ -183,13 +184,15 @@ begin
     rcases not_irred_imp_non_unit_divisors h_contr h0 with ⟨m, n, p_eq_mn, hc⟩,
     -- ∃ (c : α) (d : polynomial α), quot_poly (C c) * m = quot_poly d
     rcases quot_poly_mult m with ⟨c,d,h_cm_eq_d⟩, -- NOTE rfling  h_cm_eq_d produces an error
+
     -- ∃(c' : α) (d' : polynomial α), (primitive d') ∧ ((C c') * d' = d)
     rcases has_primitive_factorisation d with ⟨c', d', primd, rfl⟩,
     rcases quot_poly_mult n with ⟨c₂,d₂,h_c₂n_eq_d₂⟩, -- NOTE rfling  h_c₂n_eq_d₂ produces an error
     -- ∃(c₂' : α) (d₂' : polynomial α), (primitive d₂') ∧ ((C c₂') * d₂' = d₂)
     rcases has_primitive_factorisation d₂ with ⟨c₂', d₂', primd₂, rfl⟩,
-
-    have h5  : (quot_poly (C c) * m) * quot_poly (C c₂) * n = quot_poly (C c' * d') * quot_poly (C c₂' * d₂'), by sorry,
+    
+    have h5  : (quot_poly (C c) * m) * quot_poly (C c₂) * n = quot_poly (C c' * d') * quot_poly (C c₂' * d₂'), 
+        begin rw [h_cm_eq_d, mul_assoc, h_c₂n_eq_d₂], end, -- It would be lovely if rw_assoc worked here.
     have h6  : quot_poly p * quot_poly (C c) * quot_poly (C c₂) = quot_poly (C c' * d') * quot_poly (C c₂' * d₂'), by sorry,
     have h6' : quot_poly p * quot_poly (C (c * c₂)) = quot_poly (C c' * d') * quot_poly (C c₂' * d₂'), by sorry, 
     have h6'' : quot_poly p * quot_poly (C (c * c₂)) * C ((to_quot (c * c₂))⁻¹) = quot_poly (C c' * d') * quot_poly (C c₂' * d₂')  * C ((to_quot (c * c₂))⁻¹), by sorry,
