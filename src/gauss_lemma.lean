@@ -189,7 +189,11 @@ begin
     -- ∃(c₂' : α) (d₂' : polynomial α), (primitive d₂') ∧ ((C c₂') * d₂' = d₂)
     rcases has_primitive_factorisation d₂ with ⟨c₂', d₂', primd₂, rfl⟩,
 
-    have h7 : quot_poly p = quot_poly (d' * d₂') *  C ((to_quot (c' * c₂'))⁻¹), by sorry, -- simp/coe of h6 - shouldn't matter if we coe along poly first or to quot first.
+    have h5  : (quot_poly (C c) * m) * quot_poly (C c₂) * n = quot_poly (C c' * d') * quot_poly (C c₂' * d₂'), by sorry,
+    have h6  : quot_poly p * quot_poly (C c) * quot_poly (C c₂) = quot_poly (C c' * d') * quot_poly (C c₂' * d₂'), by sorry,
+    have h6' : quot_poly p * quot_poly (C (c * c₂)) = quot_poly (C c' * d') * quot_poly (C c₂' * d₂'), by sorry, 
+    have h6'' : quot_poly p * quot_poly (C (c * c₂)) * C ((to_quot (c * c₂))⁻¹) = quot_poly (C c' * d') * quot_poly (C c₂' * d₂')  * C ((to_quot (c * c₂))⁻¹), by sorry,
+    have h7  : quot_poly p = quot_poly (d' * d₂') *  C ((to_quot (c' * c₂'))⁻¹), by sorry, 
     -- LHS has integer coeffts, so RHS has integer coeffts.
     -- p is primitive, d',d₂' are primtive. So if  (1/quot_poly (C c)) * (1/quot_poly (C c₂)) ≠ 1 contradiction. 
     -- if = 1, then produced a factorisation for p. contradiction. 
