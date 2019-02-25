@@ -205,7 +205,7 @@ begin
         have h8 : quot_poly p = quot_poly (d' * d₂') * C (to_quot k), by rwa ←hk at h7,
         have h8' : quot_poly p = quot_poly (d' * d₂') * quot_poly (C k), by sorry, -- Simplifier
         have h9 : quot_poly p = quot_poly(d' * (C k) * d₂'), by sorry, -- Simplifier
-        have h10 : p = d * ((C k) * d₂'), by sorry, -- coe lemma
+        have h10 : p = d' * ((C k) * d₂'), by sorry, -- coe lemma
         have h10' : ¬irreducible p, by sorry, -- as in irred_imp_prim, have witness for reduciblilty
         show false, from h10' hp_ir,
         -- case 2 
