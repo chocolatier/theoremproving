@@ -61,6 +61,12 @@ begin
      
     by_contradiction hc,
     rw not_exists at hc,
+    simp [not_and] at hc,
+
+    have h1 : ∃(a : polynomial α), is_const a ∧ a ∣ p, by sorry,
+    rcases h1 with ⟨a,ha⟩,
+    have h_const_a := and.left ha,
+    have h_div := and.right ha,
     
 end
 
@@ -111,7 +117,7 @@ def is_integer (q : quotient_ring α) : Prop := ∃(a : α), to_quot a = q
 
 def quot_poly (p : polynomial α) : polynomial (quotient_ring α) := p.map to_quot
 
--- set c = gcd coeffts. 
+-- set c = gcd coeffts. But where is gcd for more than 2 elems?
 lemma has_primitive_factorisation (p : polynomial α) : ∃(c : α) (p' : polynomial α), primitive p' ∧ C c * p' = p := sorry       
 
 lemma quot_poly_mult (p : polynomial (quotient_ring α)) : ∃(c : α) (d : polynomial α), quot_poly (C c) * p = quot_poly d := sorry 
@@ -138,8 +144,8 @@ lemma unit_is_const {p : polynomial γ} (hp : is_unit p) : is_const p :=
 begin 
     have h1: degree p = 0 := degree_eq_zero_of_is_unit hp,
     have h2 : p ≠ 0, by sorry,
-    have h3 : nat_degree p = 0, by {rw [degree_eq_nat_degree h2, coe_eq_coe.1] at h1, exact h1},
-    rwa [←is_const] at h2
+    have h3 : nat_degree p = 0, by sorry,
+    rwa [←is_const] at h3
 end
 
 lemma irred_imp_prim (p : polynomial α) (hp_nc : ¬is_const p) (hp : irreducible p): primitive p :=  
