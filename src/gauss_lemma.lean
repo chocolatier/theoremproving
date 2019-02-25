@@ -137,7 +137,7 @@ end
 lemma irred_imp_prim (p : polynomial α) (hp : irreducible p): primitive p :=  
 begin 
     by_contradiction hc,
-    have h1 : ∃(q : polynomial α), ¬(non_unit_const q → ¬const_divisor p q), by exact not_forall.1 hc,
+    have h1 : ∃(q : polynomial α), ¬(non_unit_const q → ¬const_divisor p q) := not_forall.1 hc,
     apply exists.elim h1,
     intros q hq,
     rw [not_imp, not_not] at hq,
