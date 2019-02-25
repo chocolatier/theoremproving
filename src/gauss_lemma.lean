@@ -63,9 +63,9 @@ begin
     rw not_exists at hc,
     simp [not_and] at hc,
 
-    have h1 : ∃(a : polynomial α), is_const a ∧ a ∣ p, by sorry,
+    have h1 : ∃(a : α), ¬is_unit a ∧ C a ∣ p, by sorry,
     rcases h1 with ⟨a,ha⟩,
-    have h_const_a := and.left ha,
+    have h_non_unit := and.left ha,
     have h_div := and.right ha,
     
 end
@@ -189,9 +189,35 @@ begin
     -- ∃(c₂' : α) (d₂' : polynomial α), (primitive d₂') ∧ ((C c₂') * d₂' = d₂)
     rcases has_primitive_factorisation d₂ with ⟨c₂', d₂', primd₂, rfl⟩,
 
-    sorry
-end 
-
+    have h7 : quot_poly p = quot_poly (d' * d₂') *  C ((to_quot (c' * c₂'))⁻¹), by sorry, -- simp/coe of h6 - shouldn't matter if we coe along poly first or to quot first.
+    -- LHS has integer coeffts, so RHS has integer coeffts.
+    -- p is primitive, d',d₂' are primtive. So if  (1/quot_poly (C c)) * (1/quot_poly (C c₂)) ≠ 1 contradiction. 
+    -- if = 1, then produced a factorisation for p. contradiction. 
+    cases em (is_unit (c * c₂)),
+        -- Case 1
+        have h_const : ∃(k : α), (to_quot k) = has_inv.inv (to_quot (c' * c₂')), by sorry, -- by to_quot inv (c * c₂) = int to_quot (c * c₂) coe lemma
+        apply exists.elim h_const,
+        intros k hk,
+        have h8 : quot_poly p = quot_poly (d' * d₂') * C (to_quot k), by rwa ←hk at h7,
+        have h8' : quot_poly p = quot_poly (d' * d₂') * quot_poly (C k), by sorry, -- Simplifier
+        have h9 : quot_poly p = quot_poly(d' * (C k) * d₂'), by sorry, -- Simplifier
+        have h10 : p = d * ((C k) * d₂'), by sorry, -- coe lemma
+        have h10' : ¬irreducible p, by sorry, -- as in irred_imp_prim, have witness for reduciblilty
+        show false, from h10' hp_ir,
+        -- case 2 
+        have h_coeff_eq : ∀(n : ℕ), coeff p' n = coeff (quot_poly (d' * d₂') *  C (has_inv.inv (to_quot (c' * c₂')))) n, by sorry,
+        have h_p_coeff : ∀ (n : ℕ), coeff p' n = to_quot (coeff p n), by sorry, 
+        have h_p_coeff' : ∀(n: ℕ), coeff (quot_poly (d' * d₂') *  C (has_inv.inv (to_quot (c' * c₂')))) n = to_quot (coeff p n), by sorry,
+        have h_coeff : ∀(n : ℕ), coeff (quot_poly (d' * d₂') *  C (has_inv.inv (to_quot (c' * c₂')))) n = coeff (quot_poly (d' * d₂')) n * has_inv.inv (to_quot (c' * c₂')), by sorry,
+        have h_d_d2_prim : primitive (d' * d₂'), by exact (prod_of_prim_is_prim d' d₂' (and.intro (hd'.left) (hd₂'.left))),
+        have h8 : ∀(n : ℕ), coeff p' n =  coeff (quot_poly (d' * d₂')) n * has_inv.inv (to_quot (c' * c₂')), by sorry, 
+        have h9 : ∀(n : ℕ), to_quot (coeff p n) = coeff (quot_poly (d' * d₂')) n * has_inv.inv (to_quot (c' * c₂')), by sorry, 
+        have h9' : ∀(n : ℕ), to_quot (c' * c₂') * to_quot (coeff p n) = coeff (quot_poly (d' * d₂')) n, by sorry,
+        have h10 : ∀(n : ℕ), to_quot (c' * c₂' * coeff p n) = coeff (quot_poly (d' * d₂')) n, by sorry, 
+        have h11 : ∀(n : ℕ), c' * c₂' ∣ coeff (d' * d₂') n, by sorry, 
+        have h12 : ¬primitive (d' * d₂'), by sorry,
+        show false, from h_d_d2_prim h12
+end
 
 -- -- deterministic time out for some reason now
 -- lemma irred_in_base_imp_irred_in_quot' {p : polynomial α} (hp_ir : irreducible p) (hp_nc : ¬is_const p) : irreducible (quot_poly p) := 
