@@ -72,12 +72,7 @@ begin
     exact h3
 end
 
--- Tactic: const divisor (C a) only divides p if a divides all coeffts of p. C a ∣ pq.
--- If C a ∤ f, then some coefft cᵢ of f, s.t. a ∤ cᵢ. Pick the minimal such cᵢ. Similarly 
--- if C a ∤ g, then there exists coefft dⱼ of g, s.t. a ∤ dⱼ. coefft k of x^(i+j) will 
--- be k = ∑cₘdₙ, where m + n = i + j. Except when m = i and n = j, either m < i or n < j
--- so a ∣ cₘdₙ. But a ∤ cᵢdⱼ. Hence a ∤ k. Contradiction. 
--- Tactic 2 : n irred → n prime as a const by UFD. α/(n) is domain, so α/(n)[x] is domain
+-- Tactic : n irred → n prime as a const by UFD. α/(n) is domain, so α/(n)[x] is domain
 -- n ∣ pq, so pq vanishes in α/(n)[x]. Hence p vanishes or q vanishes. But poly p vanishes
 -- iff n ∣ p. n ∣ p or n ∣ q. 
 -- α →  α[x]
