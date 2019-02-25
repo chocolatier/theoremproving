@@ -134,22 +134,26 @@ begin
     show false, from h_non_unit hp'
 end
 
-lemma irred_imp_prim (p : polynomial α) (hp : irreducible p): primitive p :=  
+lemma irred_imp_prim (p : polynomial α) (hp_nc : ¬is_const p) (hp : irreducible p): primitive p :=  
 begin 
     by_contradiction hc,
-    have h1 : ∃(q : polynomial α), ¬(non_unit_const q → ¬const_divisor p q) := not_forall.1 hc,
-    apply exists.elim h1,
-    intros q hq,
+    rcases (not_forall.1 hc) with ⟨q, hq⟩,
     rw [not_imp, not_not] at hq,
     have h_non_unit_const : _ := and.left hq,
     have h_non_unit : _ := and.right h_non_unit_const,
     have h_const_divisor : _ := and.right hq,
     have h_divisor : _ := and.right h_const_divisor,
--- Prove the final step as a separate lemma, starting with:    
--- dsimp [irreducible] at hp,
-
-    -- simp [h_divisor, h_non_unit, hp] -- TODO: There should be some lemma that states non unit q and q ∣ p → reducible q. Find it. 
+    have h_const : _ := and.left h_const_divisor,
+    have h_non_multiple : ∀(a : polynomial α), is_unit a → a * q ≠ p := sorry, -- unit multiple of a const can't be a non-const
+    have h_not_irred_p : _ := non_unit_divisor_imp_not_irred h_divisor h_non_unit h_non_multiple,
+    show false, from h_not_irred_p hp
 end
+
+lemma unit_is_const {p : polynomial γ} (hp : is_unit p) : is_const p := 
+begin 
+    sorry
+end
+
 
 lemma not_irred_imp_non_unit_divisors {γ : Type*} [monoid γ] [decidable_eq γ] {p : γ} (hp : ¬irreducible p) (hp' : ¬is_unit p) : ∃(m n : γ),   p = m * n  ∧ (¬ is_unit m) ∧ (¬ is_unit n) :=
 begin 
@@ -158,15 +162,6 @@ begin
     simp [hp'] at hp,
     simp [not_forall,not_imp,not_or_distrib] at hp,
     exact hp
-end
-
-lemma non_const_imp_non_unit [field γ] {p : polynomial γ} (hp : ¬is_const p) : ¬is_unit p := 
-begin 
-    by_contradiction hc,
-    have h1 : _ := degree_eq_zero_of_is_unit hc,
-    have h2 : _ := not_const_imp_non_zero hp,
-    have h3 : _ := degree_eq_nat_degree h2,
-    have h4 : _ := 0 = nat_degree p, by sorry -- rwing fails here?
 end
 
 lemma const_iff_quot_poly_const {p : polynomial α} : is_const p ↔ is_const (quot_poly p) := sorry
