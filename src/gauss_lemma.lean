@@ -134,6 +134,14 @@ begin
     show false, from h_non_unit hp'
 end
 
+lemma unit_is_const {p : polynomial γ} (hp : is_unit p) : is_const p := 
+begin 
+    have h1: degree p = 0 := degree_eq_zero_of_is_unit hp,
+    have h2 : p ≠ 0, by sorry,
+    have h3 : nat_degree p = 0, by {rw [degree_eq_nat_degree h2, coe_eq_coe.1] at h1, exact h1},
+    rwa [←is_const] at h2
+end
+
 lemma irred_imp_prim (p : polynomial α) (hp_nc : ¬is_const p) (hp : irreducible p): primitive p :=  
 begin 
     by_contradiction hc,
@@ -148,12 +156,6 @@ begin
     have h_not_irred_p : _ := non_unit_divisor_imp_not_irred h_divisor h_non_unit h_non_multiple,
     show false, from h_not_irred_p hp
 end
-
-lemma unit_is_const {p : polynomial γ} (hp : is_unit p) : is_const p := 
-begin 
-    sorry
-end
-
 
 lemma not_irred_imp_non_unit_divisors {γ : Type*} [monoid γ] [decidable_eq γ] {p : γ} (hp : ¬irreducible p) (hp' : ¬is_unit p) : ∃(m n : γ),   p = m * n  ∧ (¬ is_unit m) ∧ (¬ is_unit n) :=
 begin 
