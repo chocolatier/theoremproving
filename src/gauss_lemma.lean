@@ -116,6 +116,24 @@ lemma has_primitive_factorisation (p : polynomial α) : ∃(c : α) (p' : polyno
 
 lemma quot_poly_mult (p : polynomial (quotient_ring α)) : ∃(c : α) (d : polynomial α), quot_poly (C c) * p = quot_poly d := sorry 
 
+lemma non_unit_divisor_imp_not_irred {p q : polynomial α} (h_divisor : q ∣ p) (h_non_unit : ¬is_unit q) (h_neq : ∀(a : polynomial α), is_unit a → a * q ≠ p) : ¬irreducible p :=
+begin 
+    by_contradiction hp,
+    dsimp [irreducible] at hp,
+    have h1: ¬is_unit p, by sorry, -- non unit q cannot divide unit p
+    simp [h1] at hp,
+    have h2: ∃(a : polynomial α), p = a * q , by sorry, -- divisibility
+    rcases h2 with ⟨a, haq⟩,
+    have hp' := hp a q,
+    have h_neq' := h_neq a,
+    simp [haq] at hp',
+    cases hp',
+    have hc := h_neq' hp',
+    show false, from hc (eq.symm haq),
+    -- show false, from (eq.symm hc) haq fails
+    show false, from h_non_unit hp'
+end
+
 lemma irred_imp_prim (p : polynomial α) (hp : irreducible p): primitive p :=  
 begin 
     by_contradiction hc,
