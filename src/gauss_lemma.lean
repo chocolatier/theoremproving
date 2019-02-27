@@ -29,10 +29,6 @@ variable [has_mod α]
 
 def is_const {γ : Type*} [comm_semiring γ] [decidable_eq γ] (p : polynomial γ) : Prop := nat_degree p = 0
 
-def is_const' {γ : Type*} [comm_semiring γ] [decidable_eq γ] (p : polynomial γ) : Prop := ∃(g : γ), (C g) = p 
-
-lemma const_iff_const' : is_const p ↔ is_const' p := sorry
-
 instance is_const.decidable : decidable (is_const p) :=
 by unfold is_const; apply_instance
 
@@ -93,8 +89,11 @@ lemma div_pq_imp_div_p_or_q {p q : polynomial α} {r: α} (hdiv : C r ∣ (p * q
 begin 
     let I : ideal (polynomial α) := ideal.span (singleton (C r)),
     have h1 : ∀(f : polynomial α),  (C r) ∣ f ↔ ideal.quotient.mk I f = 0, by sorry,
-    have h2 : ideal.quotient.mk I (p * q) = 0 := (h1 (p * q)) hdiv,
-    
+    have h2 : _ := h1 (p * q),
+    have h3 : _ := h2.1 hdiv,
+    -- have h4 : (ideal.quotient.mk I p = 0) ∨ (ideal.quotient.mk I q = 0), by sorry, -- Integral Domain I -- leads to deterministic timeout
+    have h5 : C r ∣ p ∨  C r ∣ q, by sorry,
+    exact h5
 end
 
 lemma prod_of_prim_is_prim (p q : polynomial α) : (primitive p ∧ primitive q) → primitive (p * q) := 
