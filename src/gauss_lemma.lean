@@ -79,6 +79,8 @@ begin
     exact h3
 end
 
+lemma div_pq_imp_div_p_or_q_timeout {p q : polynomial α} {r : α} (hr : irreducible r) :  (ideal.quotient.mk (ideal.span (singleton (C r))) p = 0) ∨ (ideal.quotient.mk (ideal.span (singleton (C r))) q = 0) := sorry
+
 -- Tactic : n irred → n prime as a const by UFD. α/(n) is domain, so α/(n)[x] is domain
 -- n ∣ pq, so pq vanishes in α/(n)[x]. Hence p vanishes or q vanishes. But poly p vanishes
 -- iff n ∣ p. n ∣ p or n ∣ q. 
