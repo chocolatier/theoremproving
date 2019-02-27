@@ -54,7 +54,7 @@ lemma c_irred_iff_irred (a : α) : irreducible a ↔ irreducible (C a) := sorry
 
 -- Tactic : Argue on degree. If m ∣ n, deg m < deg n or deg m = deg n = 0. deg bottoms out, and if m is const
 -- use UFD-ness of α to argue irreducible factorization. 
-lemma div_imp_irred_div (p m : polynomial α) (hm : m ∣ p) (hm' : ¬is_unit m) : ∃(n : polynomial α), (irreducible n) ∧ n ∣ p := 
+lemma div_imp_irred_div {p m : polynomial α} (hm : m ∣ p) (hm' : ¬is_unit m) : ∃(n : polynomial α), (irreducible n) ∧ n ∣ p := 
 begin
     cases em (irreducible m),
     have h_and : _ := and.intro h hm,
@@ -85,10 +85,9 @@ end
 -- α →  α[x]
 -- ↓    ↓
 -- α(n) →α/(n)[x]
-lemma div_pq_imp_div_p_or_q (p q : polynomial α) (r: α) (hdiv : C r ∣ (p * q)) (hr : irreducible r) : C r ∣ p ∨  C r ∣ q :=
+lemma div_pq_imp_div_p_or_q {p q : polynomial α} {r: α} (hdiv : C r ∣ (p * q)) (hr : irreducible r) : C r ∣ p ∨  C r ∣ q :=
 begin 
-    have h1: prime r := sorry,
-    have  
+    sorry
 end
 
 lemma prod_of_prim_is_prim (p q : polynomial α) : (primitive p ∧ primitive q) → primitive (p * q) := 
@@ -100,9 +99,12 @@ begin
     have h_helper : ¬(∀(r : polynomial α), non_unit_const r → ¬const_divisor (p * q) r) , by exact h_pq,
     have h_helper2 : ∃r:polynomial α, ¬(non_unit_const r → ¬const_divisor (p * q) r), by exact not_forall.1 h_helper,
     have h_div : ∃(m : polynomial α), non_unit_const m ∧ const_divisor (p * q) m, by {simp [not_imp, not_not] at h_helper2, exact h_helper2}, 
-    have h_irred_div : ∃(n : α), (irreducible n) ∧ const_divisor (p * q) (C n), by sorry, 
-    apply exists.elim h_irred_div,
-    intros n hn,
+    rcases h_div with ⟨m, hm⟩,
+
+    have h_irred_div : ∃(n : α), (irreducible n) ∧ ((C n) ∣ (p * q)), by sorry, 
+    rcases h_irred_div with ⟨n, hn⟩,
+    -- apply exists.elim h_irred_div,
+    -- intros n hn,
     have h_n_div : (C n ∣ p) ∨ (C n ∣ q), by sorry, 
     have h_npq : ¬primitive p ∨ ¬primitive q, by sorry,
     show false,
