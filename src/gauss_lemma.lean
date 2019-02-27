@@ -184,6 +184,24 @@ end
 
 lemma const_iff_quot_poly_const {p : polynomial α} : is_const p ↔ is_const (quot_poly p) := sorry
 
+lemma quot_poly_coe (a : α): quot_poly (C a) = (C (to_quot a)) := 
+begin 
+    unfold quot_poly,
+    unfold map, 
+    sorry
+end 
+
+instance C.is_semiring_hom : is_semiring_hom (C : α → polynomial α) := sorry
+instance quot_poly.is_semiring_hom : is_semiring_hom (quot_poly : polynomial α → polynomial (quotient_ring α)) := sorry
+
+lemma can_factor_poly_helper (a b : α) : quot_poly (C (a * b)) * C  ((to_quot (a * b))⁻¹) = 1 := 
+begin 
+    have h1: quot_poly (C (a * b)) = (C (to_quot (a*b))), by rw quot_poly_coe,
+    rw h1,
+    rw ←C.is_semiring_hom.map_mul,
+end 
+
+
 lemma can_factor_poly (p : polynomial α) (hp: ¬is_const p) (h_nir : ¬irreducible (quot_poly p)) : ∃(d' d₂' : polynomial α), ∃(c' c₂' : α), quot_poly p = quot_poly (d' * d₂') *  C ((to_quot (c' * c₂'))⁻¹) := 
 begin 
     have h0 : ¬ is_unit (quot_poly p) := sorry,
