@@ -191,8 +191,13 @@ begin
     sorry
 end 
 
-instance C.is_semiring_hom : is_semiring_hom (C : α → polynomial α) := sorry
-instance quot_poly.is_semiring_hom : is_semiring_hom (quot_poly : polynomial α → polynomial (quotient_ring α)) := sorry
+instance quot_poly.is_semiring_hom : is_semiring_hom (quot_poly : polynomial α → polynomial (quotient_ring α)) := 
+begin 
+    have h1 : quot_poly 1 = (1 : polynomial (quotient_ring α)), by sorry,
+    have h0 : quot_poly 0 = (0 : polynomial (quotient_ring α)), by refl,
+    refine_struct {..};
+    simp [h0, h1]
+end
 
 lemma can_factor_poly_helper (a b : α) : quot_poly (C (a * b)) * C  ((to_quot (a * b))⁻¹) = 1 := 
 begin 
@@ -224,7 +229,10 @@ begin
                                                            ... = quot_poly p * quot_poly (C (c * c₂)) : by sorry,
     have h6' : quot_poly p * quot_poly (C (c * c₂)) * C ((to_quot (c * c₂))⁻¹) = quot_poly (C c' * d') * quot_poly (C c₂' * d₂')  * C ((to_quot (c * c₂))⁻¹), by rw ←h6,
     have h7  : quot_poly p = quot_poly (d' * d₂') *  C ((to_quot (c' * c₂'))⁻¹), by sorry, 
-    sorry
+    have h7' : _ := exists.intro c₂' h7,
+    have h7'' : _ := exists.intro c' h7',
+    have h7''' : _ := exists.intro d₂' h7'',
+    apply exists.intro d' h7'''
 end 
 
 -- lemma irred_in_base_imp_irred_in_quot {p : polynomial α} (hp_ir : irreducible p) (hp_nc : ¬is_const p) : irreducible (quot_poly p) :=
