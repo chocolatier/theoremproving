@@ -184,8 +184,9 @@ end
 
 lemma const_iff_quot_poly_const {p : polynomial α} : is_const p ↔ is_const (quot_poly p) := sorry
 
-lemma can_factor_poly (p : polynomial α) (h_nir : ¬irreducible (quot_poly p)) : ∃(d' d₂' : polynomial α), ∃(c' c₂' : α), quot_poly p = quot_poly (d' * d₂') *  C ((to_quot (c' * c₂'))⁻¹) := 
+lemma can_factor_poly (p : polynomial α) (hp: ¬is_const p) (h_nir : ¬irreducible (quot_poly p)) : ∃(d' d₂' : polynomial α), ∃(c' c₂' : α), quot_poly p = quot_poly (d' * d₂') *  C ((to_quot (c' * c₂'))⁻¹) := 
 begin 
+    have h0 : ¬ is_unit (quot_poly p) := sorry,
     rcases not_irred_imp_non_unit_divisors h_nir h0 with ⟨m, n, p_eq_mn, hc⟩,
     -- ∃ (c : α) (d : polynomial α), quot_poly (C c) * m = quot_poly d
     rcases quot_poly_mult m with ⟨c,d,h_cm_eq_d⟩, 
@@ -205,7 +206,7 @@ begin
                                                            ... = quot_poly p * quot_poly (C (c * c₂)) * C ((to_quot (c * c₂))⁻¹) : by rw ←is_ring_hom.map_mul, -- invalid rewrite tactic, failed to synthesize type class instance
 
     have h7  : quot_poly p = quot_poly (d' * d₂') *  C ((to_quot (c' * c₂'))⁻¹), by sorry, 
-    exact h7
+    sorry
 end 
 
 -- lemma irred_in_base_imp_irred_in_quot {p : polynomial α} (hp_ir : irreducible p) (hp_nc : ¬is_const p) : irreducible (quot_poly p) :=
