@@ -23,7 +23,6 @@ variables {γ : Type u} [decidable_eq γ] [integral_domain γ] [unique_factoriza
 variables [integral_domain α] {p q r s : polynomial α}
 variable [decidable_eq α]
 variable [unique_factorization_domain α]
-variable [has_mod α]
 
 -- set_option pp.all true
 
@@ -79,7 +78,7 @@ begin
     exact h3
 end
 
-lemma div_pq_imp_div_p_or_q_timeout {p q : polynomial α} {r : α} (hr : irreducible r) :  (ideal.quotient.mk (ideal.span (singleton (C r))) p = 0) ∨ (ideal.quotient.mk (ideal.span (singleton (C r))) q = 0) := sorry
+-- lemma div_pq_imp_div_p_or_q_timeout {p q : polynomial α} {r : α} (hr : irreducible r) :  (ideal.quotient.mk (ideal.span (singleton (C r))) p = 0) ∨ (ideal.quotient.mk (ideal.span (singleton (C r))) q = 0) := sorry
 
 -- Tactic : n irred → n prime as a const by UFD. α/(n) is domain, so α/(n)[x] is domain
 -- n ∣ pq, so pq vanishes in α/(n)[x]. Hence p vanishes or q vanishes. But poly p vanishes
@@ -213,8 +212,9 @@ begin
     have h1: quot_poly (C (a * b)) = (C (to_quot (a*b))), by rw quot_poly_coe,
     rw h1,
     rw ←C.is_semiring_hom.map_mul,
-    -- sorry
-    rw [mul_right_inv] 
+    have h2 : to_quot (a * b) * (to_quot (a * b))⁻¹ = 1, by sorry, -- by simp, -- mul_right_inv (to_quot (a * b)),
+    rw [h2],
+    refl
 end 
 
 
@@ -236,8 +236,8 @@ begin
                quot_poly (C c' * d') * quot_poly (C c₂' * d₂') = (quot_poly (C c) * m) * quot_poly (C c₂) * n : by exact h5.symm
                                                            ... = m * n * quot_poly (C c) * quot_poly (C c₂) : by ring
                                                            ... = quot_poly p * quot_poly (C c) * quot_poly (C c₂) : by rw ←p_eq_mn
-                                                           ... = quot_poly p * quot_poly ((C c) * (C c₂)) : by sorry  
-                                                           ... = quot_poly p * quot_poly (C (c * c₂)) : by sorry,
+                                                           ... = quot_poly p * quot_poly ((C c) * (C c₂)) : by rw ←quot_poly.is_semiring_hom.map_mul  
+                                                           ... = quot_poly p * quot_poly (C (c * c₂)) : by rw ←C.is_semiring_hom.map_mul,
     have h6' : quot_poly p * quot_poly (C (c * c₂)) * C ((to_quot (c * c₂))⁻¹) = quot_poly (C c' * d') * quot_poly (C c₂' * d₂')  * C ((to_quot (c * c₂))⁻¹), by rw ←h6,
     have h7  : quot_poly p = quot_poly (d' * d₂') *  C ((to_quot (c' * c₂'))⁻¹), by rw [can_factor_poly_helper] at h6, 
     have h7' : _ := exists.intro c₂' h7,
