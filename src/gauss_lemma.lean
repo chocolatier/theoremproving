@@ -173,6 +173,11 @@ begin
     exact hp
 end
 
+lemma nat_deg_quot_poly_eq_nat_deg_poly (p : polynomial α) : nat_degree p = nat_degree (quot_poly p) := 
+begin 
+    sorry
+end
+
 lemma const_iff_quot_poly_const {p : polynomial α} : is_const p ↔ is_const (quot_poly p) := sorry
 
 lemma irred_in_base_imp_irred_in_quot {p : polynomial α} (hp_ir : irreducible p) (hp_nc : ¬is_const p) : irreducible (quot_poly p) :=
@@ -193,8 +198,13 @@ begin
     
     have h5  : (quot_poly (C c) * m) * quot_poly (C c₂) * n = quot_poly (C c' * d') * quot_poly (C c₂' * d₂'), 
         begin rw [h_cm_eq_d, mul_assoc, h_c₂n_eq_d₂], end, -- It would be lovely if rw_assoc worked here.
-    have h6  : quot_poly p * quot_poly (C c) * quot_poly (C c₂) = quot_poly (C c' * d') * quot_poly (C c₂' * d₂'), by sorry,
-    have h6' : quot_poly p * quot_poly (C (c * c₂)) = quot_poly (C c' * d') * quot_poly (C c₂' * d₂'), by sorry, 
+    have h6  : quot_poly (C c' * d') * quot_poly (C c₂' * d₂') = quot_poly p * quot_poly (C (c * c₂)), from calc
+               quot_poly (C c' * d') * quot_poly (C c₂' * d₂') = (quot_poly (C c) * m) * quot_poly (C c₂) * n : by exact h5.symm
+                                                           ... = m * n * quot_poly (C c) * quot_poly (C c₂) : by ring
+                                                           ... = quot_poly p * quot_poly (C c) * quot_poly (C c₂) : by rw ←p_eq_mn
+                                                           ... = quot_poly p * quot_poly ((C c) * (C c₂)) : by sorry 
+                                                           ... = quot_poly p * quot_poly (C (c * c₂)) : by sorry,
+        
     have h6'' : quot_poly p * quot_poly (C (c * c₂)) * C ((to_quot (c * c₂))⁻¹) = quot_poly (C c' * d') * quot_poly (C c₂' * d₂')  * C ((to_quot (c * c₂))⁻¹), by sorry,
     have h7  : quot_poly p = quot_poly (d' * d₂') *  C ((to_quot (c' * c₂'))⁻¹), by sorry, 
     -- LHS has integer coeffts, so RHS has integer coeffts.
@@ -212,6 +222,7 @@ begin
         have h10' : ¬irreducible p, by sorry, -- as in irred_imp_prim, have witness for reduciblilty
         show false, from h10' hp_ir,
         -- case 2 
+        let p' := quot_poly p,
         have h_coeff_eq : ∀(n : ℕ), coeff p' n = coeff (quot_poly (d' * d₂') *  C (has_inv.inv (to_quot (c' * c₂')))) n, by sorry,
         have h_p_coeff : ∀ (n : ℕ), coeff p' n = to_quot (coeff p n), by sorry, 
         have h_p_coeff' : ∀(n: ℕ), coeff (quot_poly (d' * d₂') *  C (has_inv.inv (to_quot (c' * c₂')))) n = to_quot (coeff p n), by sorry,
