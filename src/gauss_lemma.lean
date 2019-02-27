@@ -202,8 +202,9 @@ begin
                quot_poly (C c' * d') * quot_poly (C c₂' * d₂') = (quot_poly (C c) * m) * quot_poly (C c₂) * n : by exact h5.symm
                                                            ... = m * n * quot_poly (C c) * quot_poly (C c₂) : by ring
                                                            ... = quot_poly p * quot_poly (C c) * quot_poly (C c₂) : by rw ←p_eq_mn
-                                                           ... = quot_poly p * quot_poly ((C c) * (C c₂)) : by sorry 
-                                                           ... = quot_poly p * quot_poly (C (c * c₂)) : by sorry,
+                                                           ... = quot_poly p * quot_poly ((C c) * (C c₂)) : by sorry  
+                                                           ... = quot_poly p * quot_poly (C (c * c₂)) : by rw ←is_ring_hom.map_mul, -- invalid rewrite tactic, failed to synthesize type class instance
+
         
     have h6'' : quot_poly p * quot_poly (C (c * c₂)) * C ((to_quot (c * c₂))⁻¹) = quot_poly (C c' * d') * quot_poly (C c₂' * d₂')  * C ((to_quot (c * c₂))⁻¹), by sorry,
     have h7  : quot_poly p = quot_poly (d' * d₂') *  C ((to_quot (c' * c₂'))⁻¹), by sorry, 
