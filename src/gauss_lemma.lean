@@ -29,6 +29,10 @@ variable [has_mod α]
 
 def is_const {γ : Type*} [comm_semiring γ] [decidable_eq γ] (p : polynomial γ) : Prop := nat_degree p = 0
 
+def is_const' {γ : Type*} [comm_semiring γ] [decidable_eq γ] (p : polynomial γ) : Prop := ∃(g : γ), (C g) = p 
+
+lemma const_iff_const' : is_const p ↔ is_const' p := sorry
+
 instance is_const.decidable : decidable (is_const p) :=
 by unfold is_const; apply_instance
 
@@ -103,8 +107,6 @@ begin
 
     have h_irred_div : ∃(n : α), (irreducible n) ∧ ((C n) ∣ (p * q)), by sorry, 
     rcases h_irred_div with ⟨n, hn⟩,
-    -- apply exists.elim h_irred_div,
-    -- intros n hn,
     have h_n_div : (C n ∣ p) ∨ (C n ∣ q), by sorry, 
     have h_npq : ¬primitive p ∨ ¬primitive q, by sorry,
     show false,
@@ -195,15 +197,13 @@ begin
     
     have h5  : (quot_poly (C c) * m) * quot_poly (C c₂) * n = quot_poly (C c' * d') * quot_poly (C c₂' * d₂'), 
         begin rw [h_cm_eq_d, mul_assoc, h_c₂n_eq_d₂], end, -- It would be lovely if rw_assoc worked here.
-    have h6  : quot_poly (C c' * d') * quot_poly (C c₂' * d₂') = quot_poly p * quot_poly (C (c * c₂)), from calc
-               quot_poly (C c' * d') * quot_poly (C c₂' * d₂') = (quot_poly (C c) * m) * quot_poly (C c₂) * n : by exact h5.symm
-                                                           ... = m * n * quot_poly (C c) * quot_poly (C c₂) : by ring
-                                                           ... = quot_poly p * quot_poly (C c) * quot_poly (C c₂) : by rw ←p_eq_mn
-                                                           ... = quot_poly p * quot_poly ((C c) * (C c₂)) : by sorry  
-                                                           ... = quot_poly p * quot_poly (C (c * c₂)) : by rw ←is_ring_hom.map_mul, -- invalid rewrite tactic, failed to synthesize type class instance
+    have h6  : quot_poly (C c' * d') * quot_poly (C c₂' * d₂') * C ((to_quot (c * c₂))⁻¹) = quot_poly p * quot_poly (C (c * c₂)) * C ((to_quot (c * c₂))⁻¹), from calc
+               quot_poly (C c' * d') * quot_poly (C c₂' * d₂') * C ((to_quot (c * c₂))⁻¹) = (quot_poly (C c) * m) * quot_poly (C c₂) * n * C ((to_quot (c * c₂))⁻¹) : by exact h5.symm
+                                                           ... = m * n * quot_poly (C c) * quot_poly (C c₂) * C ((to_quot (c * c₂))⁻¹) : by ring
+                                                           ... = quot_poly p * quot_poly (C c) * quot_poly (C c₂) * C ((to_quot (c * c₂))⁻¹) : by rw ←p_eq_mn
+                                                           ... = quot_poly p * quot_poly ((C c) * (C c₂)) * C ((to_quot (c * c₂))⁻¹) : by sorry  
+                                                           ... = quot_poly p * quot_poly (C (c * c₂)) * C ((to_quot (c * c₂))⁻¹) : by rw ←is_ring_hom.map_mul, -- invalid rewrite tactic, failed to synthesize type class instance
 
-        
-    have h6'' : quot_poly p * quot_poly (C (c * c₂)) * C ((to_quot (c * c₂))⁻¹) = quot_poly (C c' * d') * quot_poly (C c₂' * d₂')  * C ((to_quot (c * c₂))⁻¹), by sorry,
     have h7  : quot_poly p = quot_poly (d' * d₂') *  C ((to_quot (c' * c₂'))⁻¹), by sorry, 
     exact h7
 end 
