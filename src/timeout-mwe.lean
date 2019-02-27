@@ -7,10 +7,12 @@ local attribute [instance, priority 0] classical.prop_decidable
 
 section
 variables {α : Type} [comm_ring α] 
-lemma works {p : polynomial α} {r : α} (hr : irreducible r) :  ideal.quotient.mk (ideal.span (singleton (C r))) p = 0 := sorry
+lemma works {p : polynomial α} {r : α} : ideal.quotient.mk (ideal.span (singleton (C r))) p = 0 := sorry
 end
 
 section
+set_option trace.class_instances true
+
 variables {α : Type} [integral_domain α] 
-lemma timeout {p : polynomial α} {r : α} (hr : irreducible r) :  ideal.quotient.mk (ideal.span (singleton (C r))) p = 0 := sorry
+lemma timeout {p : polynomial α} {r : α} : ideal.quotient.mk (ideal.span (singleton (C r))) p = 0 := sorry
 end
