@@ -91,7 +91,10 @@ end
 -- α(n) →α/(n)[x]
 lemma div_pq_imp_div_p_or_q {p q : polynomial α} {r: α} (hdiv : C r ∣ (p * q)) (hr : irreducible r) : C r ∣ p ∨  C r ∣ q :=
 begin 
-    sorry
+    let I : ideal (polynomial α) := ideal.span (singleton (C r)),
+    have h1 : ∀(f : polynomial α),  (C r) ∣ f ↔ ideal.quotient.mk I f = 0, by sorry,
+    have h2 : ideal.quotient.mk I (p * q) = 0 := (h1 (p * q)) hdiv,
+    
 end
 
 lemma prod_of_prim_is_prim (p q : polynomial α) : (primitive p ∧ primitive q) → primitive (p * q) := 
