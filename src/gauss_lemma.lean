@@ -204,7 +204,7 @@ begin
                                                            ... = quot_poly p * quot_poly (C c) * quot_poly (C c₂) : by rw ←p_eq_mn
                                                            ... = quot_poly p * quot_poly ((C c) * (C c₂)) : by sorry  
                                                            ... = quot_poly p * quot_poly (C (c * c₂)) : by rw ←is_ring_hom.map_mul,
-
+    have h6' : quot_poly p * quot_poly (C (c * c₂)) * C ((to_quot (c * c₂))⁻¹) = quot_poly (C c' * d') * quot_poly (C c₂' * d₂')  * C ((to_quot (c * c₂))⁻¹), by sorry,
     have h7  : quot_poly p = quot_poly (d' * d₂') *  C ((to_quot (c' * c₂'))⁻¹), by sorry, 
     sorry
 end 
