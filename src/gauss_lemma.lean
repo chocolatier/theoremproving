@@ -78,8 +78,6 @@ begin
     exact h3
 end
 
--- lemma div_pq_imp_div_p_or_q_timeout {p q : polynomial α} {r : α} (hr : irreducible r) :  (ideal.quotient.mk (ideal.span (singleton (C r))) p = 0) ∨ (ideal.quotient.mk (ideal.span (singleton (C r))) q = 0) := sorry
-
 -- Tactic : n irred → n prime as a const by UFD. α/(n) is domain, so α/(n)[x] is domain
 -- n ∣ pq, so pq vanishes in α/(n)[x]. Hence p vanishes or q vanishes. But poly p vanishes
 -- iff n ∣ p. n ∣ p or n ∣ q. 
@@ -224,6 +222,13 @@ lemma rearrange_lemma (d' d₂' : polynomial α) (c' c₂' : α) : quot_poly (C 
 begin 
     simp [quot_poly.is_semiring_hom.map_mul],
     ring
+end
+
+-- coeffts in LHS all all integers, so coeffts on the right must be all integers. q is primitive, so no k divides all coeffts of q 
+-- follows that r must be an integer
+lemma prim_associate {p q : polynomial α} {r : quotient_ring α} (h : quot_poly p = C r * quot_poly q) : ∃(k : α), to_quot k = r := 
+begin 
+    sorry
 end
 
 lemma can_factor_poly (p : polynomial α) (hp: ¬is_const p) (h_nir : ¬irreducible (quot_poly p)) : ∃(d' d₂' : polynomial α), ∃(c' c₂' : α), quot_poly p = quot_poly (d' * d₂') *  C ((to_quot (c' * c₂'))⁻¹) := 
