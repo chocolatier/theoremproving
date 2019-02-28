@@ -217,12 +217,19 @@ begin
     refl
 end 
 
+
 lemma quot_poly_of_non_const_is_non_unit {p : polynomial α} (hp : ¬is_const p) : ¬is_unit (quot_poly p) := sorry
+
+lemma rearrange_lemma (d' d₂' : polynomial α) (c' c₂' : α) : quot_poly (C c' * d') * quot_poly (C c₂' * d₂') = quot_poly (C c' * C c₂') * quot_poly (d' * d₂') := 
+begin 
+    simp [quot_poly.is_semiring_hom.map_mul],
+    ring
+end
 
 lemma can_factor_poly (p : polynomial α) (hp: ¬is_const p) (h_nir : ¬irreducible (quot_poly p)) : ∃(d' d₂' : polynomial α), ∃(c' c₂' : α), quot_poly p = quot_poly (d' * d₂') *  C ((to_quot (c' * c₂'))⁻¹) := 
 begin 
     have h0 : ¬ is_unit (quot_poly p) := quot_poly_of_non_const_is_non_unit hp,
-    rcases not_irred_imp_non_unit_divisors h_nir h0 with ⟨m, n, p_eq_mn, hc⟩,
+    rcases not_irred_imp_non_unit_divisors h_nir h0 with ⟨m, n, h_p_eq_mn, hc⟩,
     -- ∃ (c : α) (d : polynomial α), quot_poly (C c) * m = quot_poly d
     rcases quot_poly_mult m with ⟨c,d,h_cm_eq_d⟩, 
     -- ∃(c' : α) (d' : polynomial α), (primitive d') ∧ ((C c') * d' = d)
@@ -236,11 +243,11 @@ begin
     have h6  : quot_poly (C c' * d') * quot_poly (C c₂' * d₂') = quot_poly p * quot_poly (C (c * c₂)), from calc
                quot_poly (C c' * d') * quot_poly (C c₂' * d₂') = (quot_poly (C c) * m) * quot_poly (C c₂) * n : by exact h5.symm
                                                            ... = m * n * quot_poly (C c) * quot_poly (C c₂) : by ring
-                                                           ... = quot_poly p * quot_poly (C c) * quot_poly (C c₂) : by rw ←p_eq_mn
+                                                           ... = quot_poly p * quot_poly (C c) * quot_poly (C c₂) : by rw ←h_p_eq_mn
                                                            ... = quot_poly p * quot_poly ((C c) * (C c₂)) : by begin rw mul_assoc, rw ←quot_poly.is_semiring_hom.map_mul end
                                                            ... = quot_poly p * quot_poly (C (c * c₂)) : by rw ←C.is_semiring_hom.map_mul,
-    have h6' : quot_poly p * quot_poly (C (c * c₂)) * C ((to_quot (c * c₂))⁻¹) = quot_poly (C c' * d') * quot_poly (C c₂' * d₂')  * C ((to_quot (c * c₂))⁻¹), by rw ←h6,
-    have h7  : quot_poly p = quot_poly (d' * d₂') *  C ((to_quot (c' * c₂'))⁻¹), by rw [can_factor_poly_helper] at h6, 
+    have h6' : quot_poly p * quot_poly (C (c * c₂)) * C ((to_quot (c * c₂))⁻¹) = quot_poly (C c' * C c₂') * quot_poly (d' * d₂')  * C ((to_quot (c * c₂))⁻¹), by {rw [rearrange_lemma] at h6, rw h6},
+    have h7  : quot_poly p = quot_poly (C c' * C c₂') * quot_poly (d' * d₂') *  C ((to_quot (c * c₂))⁻¹), by {rw [mul_assoc, can_factor_poly_helper] at h6', exact h6'}, 
     have h7' : _ := exists.intro c₂' h7,
     have h7'' : _ := exists.intro c' h7',
     have h7''' : _ := exists.intro d₂' h7'',
