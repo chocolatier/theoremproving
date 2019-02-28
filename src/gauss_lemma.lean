@@ -217,10 +217,11 @@ begin
     refl
 end 
 
+lemma quot_poly_of_non_const_is_non_unit {p : polynomial α} (hp : ¬is_const p) : ¬is_unit (quot_poly p) := sorry
 
 lemma can_factor_poly (p : polynomial α) (hp: ¬is_const p) (h_nir : ¬irreducible (quot_poly p)) : ∃(d' d₂' : polynomial α), ∃(c' c₂' : α), quot_poly p = quot_poly (d' * d₂') *  C ((to_quot (c' * c₂'))⁻¹) := 
 begin 
-    have h0 : ¬ is_unit (quot_poly p) := sorry,
+    have h0 : ¬ is_unit (quot_poly p) := quot_poly_of_non_const_is_non_unit hp,
     rcases not_irred_imp_non_unit_divisors h_nir h0 with ⟨m, n, p_eq_mn, hc⟩,
     -- ∃ (c : α) (d : polynomial α), quot_poly (C c) * m = quot_poly d
     rcases quot_poly_mult m with ⟨c,d,h_cm_eq_d⟩, 
@@ -236,7 +237,7 @@ begin
                quot_poly (C c' * d') * quot_poly (C c₂' * d₂') = (quot_poly (C c) * m) * quot_poly (C c₂) * n : by exact h5.symm
                                                            ... = m * n * quot_poly (C c) * quot_poly (C c₂) : by ring
                                                            ... = quot_poly p * quot_poly (C c) * quot_poly (C c₂) : by rw ←p_eq_mn
-                                                           ... = quot_poly p * quot_poly ((C c) * (C c₂)) : by rw ←quot_poly.is_semiring_hom.map_mul  
+                                                           ... = quot_poly p * quot_poly ((C c) * (C c₂)) : by begin rw mul_assoc, rw ←quot_poly.is_semiring_hom.map_mul end
                                                            ... = quot_poly p * quot_poly (C (c * c₂)) : by rw ←C.is_semiring_hom.map_mul,
     have h6' : quot_poly p * quot_poly (C (c * c₂)) * C ((to_quot (c * c₂))⁻¹) = quot_poly (C c' * d') * quot_poly (C c₂' * d₂')  * C ((to_quot (c * c₂))⁻¹), by rw ←h6,
     have h7  : quot_poly p = quot_poly (d' * d₂') *  C ((to_quot (c' * c₂'))⁻¹), by rw [can_factor_poly_helper] at h6, 
