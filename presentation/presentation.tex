@@ -97,6 +97,7 @@
     
     \begin{itemize}
       \item $\text{list } \alpha$
+      \item $\text{polynomial } \alpha$
     \end{itemize}
 
     % There is a bit more about Pi types - which depend on a function argument and Sigma types which generalise the cartesian product and so on. 
@@ -151,7 +152,7 @@
   \begin{theorem}
     Let $\alpha$ be a Unique Factorisation Domain. 
 
-    Let $p$ be a polynomial with coefficients in $\alpha$. Then $p$ factors in $\alpha$ if and only if it factors in $Frac(\alpha)$.
+    Let $p$ be a polynomial with coefficients in $\alpha$. Then $p$ factors in $\alpha[X]$ if and only if it factors in $Frac(\alpha)[X]$.
   \end{theorem}
 \end{frame} 
 
@@ -244,11 +245,63 @@
 
 \begin{frame}{Defining the Lemma}
 
+  \begin{theorem}
+    Let $p$ be a polynomial with coefficients in $\alpha$. Then $p$ factors in $\alpha[X]$ if and only if it factors in $Frac(\alpha)[X]$.
+  \end{theorem}
+
+  \begin{itemize}
+    \item $p$ is a polynomial with coefficients in $\alpha$, i.e. of type $\texttt{polynomial } \alpha$. 
+    \item Factorisation in $Frac(\alpha)[X]$ only makes sense for polynomials in \texttt{polynomial (quotient\_ring} $ \alpha\texttt{)}$. 
+    \item So we explicitly need to specify that the canonical embedding of $p$ is irreducible. 
+  \end{itemize}
+
+  \includegraphics[width=\textwidth]{gauss_fwd.png}
+  
+\end{frame}
+
+\begin{frame}{Rationals that are Integers}
+  % Explicitly specifying that the obvious embedding of $p$ in $Frac \alpha$ is irreducible isn't too bad. 
+
+  \begin{itemize}
+    \item  Similarly, we cannot claim that an element of $Frac\ \alpha$ is an element of $\alpha$. 
+    \item Lean only has total functions, so we cannot define any \texttt{to\_base:} $Frac\ \alpha \rightarrow \alpha$ directly. 
+    \item We may use an option type, defining 
+
+    \texttt{to\_base:} $Frac\ \alpha \rightarrow \texttt{option } \alpha$. 
+
+    An option type is a wrapper around alpha, so f(a) may be Just a or Nothing. 
 
 
+    \includegraphics[]{option.png}
+
+  \end{itemize}
 
 \end{frame}
 
+\begin{frame}
+  \begin{itemize}
+    \item We may choose to define a coercion that depends on a hypothesis that somehow guarantees that the function is well defined. 
+    \item But dealing with options or carrying additional hypotheses around around would get annoying very quickly.
+    \item So I chose to account for a rational $r$ being an integer by stating 
+    $\exists(a : \alpha), \texttt{to\_quot } a = r$. 
+
+    This does have the disadvantage that I have additional variables to worry about. 
+
+    So, for example, so state that a scalar multiple of $m$ is an $@alpha$ polynomial, I wrote the following:
+
+    \includegraphics[width=\textwidth]{exists.png}
+
+
+    % But on the balance I figured that would be the least annoying option. 
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{The Actual Proof}
+    The source code is up on GitHub, at \url{https://github.com/chocolatier/theoremproving/}. 
+    
+    Keeping the above points in mind, it is quite straightforward. 
+\end{frame}
 
 \end{document}
 

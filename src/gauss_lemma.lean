@@ -258,3 +258,6 @@ begin
     have h7''' : _ := exists.intro d₂' h7'',
     apply exists.intro d' h7'''
 end 
+
+lemma irred_in_base_imp_irred_in_quot {p : polynomial α} (hp_ir : irreducible p) 
+    (hp_nc : ¬is_const p) : irreducible (quot_poly p) :=
