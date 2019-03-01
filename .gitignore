@@ -1,3 +1,16 @@
+# TeX files
+*.log
+*.json
+*.gz
+*.fls
+*.fdb_latexmk
+*.aux
+*.out
+*.nav
+*.snm
+*.toc
+
+# Lean Files
 *.olean
 /_target
 /leanpkg.path
