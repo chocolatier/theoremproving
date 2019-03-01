@@ -1,4 +1,7 @@
 \documentclass{beamer}
+
+\usetheme{Szeged}
+
 \usepackage{graphicx}
 \usepackage{amsmath}
 
@@ -142,7 +145,7 @@
           like to argue that there is a coefficient of maximum degree. 
     \item Alternative implementations like lists of coefficients would require a separate proof about the fact. 
     \item Similarly, it provides a uniform API between components of the library. 
-    \item However, this does have the disadvantage that definitions can become non-intuitive.
+    \item However, definitions can become non-intuitive.
   \end{itemize}
 \end{frame}
 
@@ -287,7 +290,7 @@
 
     This does have the disadvantage that I have additional variables to worry about. 
 
-    So, for example, so state that a scalar multiple of $m$ is an $@alpha$ polynomial, I wrote the following:
+    So, for example, so state that a scalar multiple of $m$ is an $\alpha$ polynomial, I wrote the following:
 
     \includegraphics[width=\textwidth]{exists.png}
 
@@ -301,7 +304,62 @@
     The source code is up on GitHub, at \url{https://github.com/chocolatier/theoremproving/}. 
     
     Keeping the above points in mind, it is quite straightforward. 
+
+    However, the process of getting to the proof was far less straightforward
+
 \end{frame}
+
+
+\begin{frame}{Choosing Definitions}
+  \begin{itemize}
+    \item Writing Lean typically involves a lot refactoring. 
+    \item In fact, I am in process of refactoring the main lemma right now
+    \item So it becomes important to choose your definitions and lemma statements carefully 
+    \item A good rule of thumb is, if it can be split into a separate lemma, do it. 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Choosing Definitions}
+  \begin{itemize}
+    \item My first definition of primitiveness was $p$ is primitive, if for all $p \mod c$, for some non-unit constant $c$. 
+    \item Lean only defines mod for polynomials over discrete fields by default, so I wrote my own \texttt{mod\_by\_const} function. 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Choosing Definitions}
+  \includegraphics[width=\textwidth]{const_mod.png}
+\end{frame}
+
+\begin{frame}
+  \begin{itemize}
+    \item  However, this ended up hiding much of the divisibility lemmas, because Lean cannot automatically figure out that $mod\_by\_const\ p\ c = 0 \iff c \mid p$. 
+    \item I could prove the equivalence separately, but I would need to invoke it every time I needed to use divisibility properties.
+    \item So I rewrote much of my code.  
+    \item Most changes aren't $this$ drastic, but it is still worth being careful when defining lemmas.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Lots of Lemmas}  
+  \begin{itemize}
+    \item Lean being unable to figure out what is ``obvious'' to humans is an unfortunately common trend. 
+    \item A fair few statements I made in my proof without justification, require justification in Lean. For example, if $c \mid p$, then $p$ is not primitive. Or that for any polynomial $p$, we can factor it as $ap'$, where $a$ is a constant, and $p'$ is primitive. 
+    \item This has adds a lot of busy work when it comes to writing proofs. 
+    \item A rule of thumb is to treat Lean like a $really$ pedantic Eighth-grader. 
+  \end{itemize}
+  
+\end{frame}
+
+\section{Future Work}
+
+\begin{frame}{Future Work}  
+  \begin{itemize}
+    \item Firstly, finishing this proof off. As I mentioned earlier, I am in the process of refactoring. And there are plenty of sorried lemmas. 
+    \item More Galois Theory. Eisenstein's Criterion, Field Extensions etc. 
+    \item Additional/Better Tactics. It would be great if Lean could be brought to a level as smart as me. 
+  \end{itemize}
+  
+\end{frame}
+
 
 \end{document}
 
