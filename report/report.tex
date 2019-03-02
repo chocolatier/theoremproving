@@ -221,7 +221,7 @@ Note: as of commit 745d1d79e473eb48788be8ba8b3cfb6774c424a7, not all the functio
 The implementation of the forward direction of the Gauss Lemma itself is split into three separate lemmas. 
 
 \begin{itemize}
-    \item \texttt{can\_factor\_poly}: Which states that any reducible polynomial $p$ in $Frac(\alpha)[X]$ can be written as $kd'd_2'$, where $k$ is in $Frac(\alpha)$, and $d', d_2'$ are primitive polynomials in $ \alpha[X]$. 
+    \item \texttt{can\_factor\_poly}: Any reducible polynomial $p$ in $Frac(\alpha)[X]$ can be written as $kd'd_2'$, where $k$ is in $Frac(\alpha)$, and $d', d_2'$ are primitive polynomials in $ \alpha[X]$. 
     
         \includegraphics[width=\textwidth]{can_factor_poly.png}
 
@@ -235,7 +235,7 @@ The implementation of the forward direction of the Gauss Lemma itself is split i
     
     I had sorried this fact, but the human proof is that if $p = \frac{m}{n}q$, where $n$ is not a unit and $n, m$ are coprime, then $np = mq$. This is a contradiction, because the LHS and RHS have distinct coprime factors. 
 
-    And then I did a fairly longwinded deduction (full of sorries) showing that since $a \mid c_i$, for all coefficients $c_i$ of $q$, because each $a^{-1}c_i$ corresponded to some coefficient $c'_i$ of $p$, q was not primitive. 
+    Once we have the fact, it is a fairly longwinded deduction (full of sorries) showing that since $a \mid c_i$, for all coefficients $c_i$ of $q$, because each $a^{-1}c_i$ corresponded to some coefficient $c'_i$ of $p$, q was not primitive. 
 
     I believe the argument I provided in the human proof above will be easier to implement in the refactor. 
 
@@ -248,7 +248,7 @@ The implementation of the forward direction of the Gauss Lemma itself is split i
 \end{itemize}
 
 
-This depended on The Primitive Polynomial Lemma, which was implemented in two parts. 
+To implement the above, we first need the Primitive Polynomial Lemma, which was implemented in two parts. But first, we must define what a primitive polynomial is.  
 
 \begin{itemize}
    \item A polynomial being primitive is defined as it having no constant divisors. 
@@ -274,7 +274,7 @@ This depended on The Primitive Polynomial Lemma, which was implemented in two pa
 
 Each of the proofs above depend on numerous subsidiary lemmas that I wouldn't bother proving to another human, but Lean cannot infer on it's own. Such as \texttt{not\_irred\_imp\_prod}: Any reducible element can be written as a product of other non-units. Each of these are also quite straightforward to implement. 
 
-While once everything is implemented, it is straightforward, getting there wasn't.  
+While once everything is implemented, it is straightforward, getting there wasn't.  This is detailed in the next section. 
 
 \chapter{Challenges in Implementation}
 
@@ -322,7 +322,7 @@ We can define a map $\psi : Frac\ \alpha \rightarrow \alpha$ that forgets the `1
 
     \texttt{to\_base:} $Frac\ \alpha \rightarrow \texttt{option } \alpha$. 
 
-    An option type is a wrapper around alpha, so f(a) may be Some a or none. 
+    An option type is a wrapper around $\alpha$, that allows it to not have a value at all.  So $f(a)$ may return Some a, or none, signifying no value at all. 
 
 
     \includegraphics[]{option.png}
