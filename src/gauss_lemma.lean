@@ -169,7 +169,7 @@ begin
     show false, from h_not_irred_p hp
 end
 
-lemma not_irred_imp_prod {p : γ} (hp : ¬irreducible p) (hp' : ¬is_unit p) : 
+lemma not_irred_imp_prod {γ : Type*} [monoid γ] [decidable_eq γ]  {p : γ} (hp : ¬irreducible p) (hp' : ¬is_unit p) : 
     ∃(m n : γ),   p = m * n  ∧ (¬ is_unit m) ∧ (¬ is_unit n) :=
 begin 
     unfold irreducible at hp,
@@ -259,6 +259,3 @@ begin
     have h7''' : _ := exists.intro d₂' h7'',
     apply exists.intro d' h7'''
 end 
-
-lemma irred_in_base_imp_irred_in_quot {p : polynomial α} (hp_ir : irreducible p) 
-    (hp_nc : ¬is_const p) : irreducible (quot_poly p) :=
