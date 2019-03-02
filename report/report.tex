@@ -393,4 +393,27 @@ This could have been avoided if I had just sorried the lemmas instead.
 
 \section{Code Bloat}
 
+The main reason why I end up refactoring the code repeatedly is that I consistently underestimated how long a proof would be. 
+
+This is largely because of the ``trivialities'' I mentioned above. 
+
+Since most of these ``trivial'' lemmas would be used only once, it is tempting to just prove them as an additional hypothesis, i.e. have something to the effect of 
+
+\begin{center}
+    \texttt{have h : foo, by bar}    
+\end{center}
+
+ somewhere in the proof. 
+ 
+ Other times, the inbuilt tactics would not be good enough, so you'd have to spend a few more lines writing out the full calculation. 
+
+ Individually, these things aren't too bad. But each ``major'' proof would have multiple such instances, which caused substantial bloating in the size of the proof.
+ 
+ This is why my proof of the forward direction of Gauss's Lemma alone took $>$50 SLOC once I sketched each major step out, even while being full of sorries\footnote{For comparison, most proofs take approximately 5 LOC. 15-20 being the absolute maximum}. So I ended up starting a major refactor, which I am still in the process of completing. 
+
+The code being ugly wasn't the only issue it caused. Having a long, monolithic proof also causes a large slow down, because Lean ends up recompiling a lot more code after every change. In particularly egregious cases, it would lead to out of memory errors or even deterministic timeouts. 
+
+ This was also avoidable in hindsight, by splitting out the proofs into lemmas whenever I could. 
+
+
 \end{document}
