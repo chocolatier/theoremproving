@@ -169,7 +169,8 @@ begin
     show false, from h_not_irred_p hp
 end
 
-lemma not_irred_imp_non_unit_divisors {γ : Type*} [monoid γ] [decidable_eq γ] {p : γ} (hp : ¬irreducible p) (hp' : ¬is_unit p) : ∃(m n : γ),   p = m * n  ∧ (¬ is_unit m) ∧ (¬ is_unit n) :=
+lemma not_irred_imp_prod {p : γ} (hp : ¬irreducible p) (hp' : ¬is_unit p) : 
+    ∃(m n : γ),   p = m * n  ∧ (¬ is_unit m) ∧ (¬ is_unit n) :=
 begin 
     unfold irreducible at hp,
     rw [not_and_distrib, not_not, not_forall] at hp,
@@ -234,7 +235,7 @@ end
 lemma can_factor_poly (p : polynomial α) (hp: ¬is_const p) (h_nir : ¬irreducible (quot_poly p)) : ∃(d' d₂' : polynomial α), ∃(c' c₂' : α), quot_poly p = quot_poly (d' * d₂') *  C ((to_quot (c' * c₂'))⁻¹) := 
 begin 
     have h0 : ¬ is_unit (quot_poly p) := quot_poly_of_non_const_is_non_unit hp,
-    rcases not_irred_imp_non_unit_divisors h_nir h0 with ⟨m, n, h_p_eq_mn, hc⟩,
+    rcases not_irred_imp_prod h_nir h0 with ⟨m, n, h_p_eq_mn, hc⟩,
     -- ∃ (c : α) (d : polynomial α), quot_poly (C c) * m = quot_poly d
     rcases quot_poly_mult m with ⟨c,d,h_cm_eq_d⟩, 
     -- ∃(c' : α) (d' : polynomial α), (primitive d') ∧ ((C c') * d' = d)

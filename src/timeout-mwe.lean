@@ -12,6 +12,7 @@ end
 
 section
 set_option trace.class_instances true
+set_option class.instance_max_depth 1000000
 
 variables {α : Type} [integral_domain α] 
 lemma timeout {p : polynomial α} {r : α} : ideal.quotient.mk (ideal.span (singleton (C r))) p = 0 := sorry
