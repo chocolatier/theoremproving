@@ -338,7 +338,59 @@ We can define a map $\psi : Frac\ \alpha \rightarrow \alpha$ that forgets the `1
 
     This does have the disadvantage that I have additional variables to worry about, and can become even more convoluted than in \texttt{can\_factor\_poly}. But on the balance I thought that it would be the least annoying option to deal with. 
 
+    Unlike the other options, the statement itself does not provide a construction, and just asserts the existence of such an $a$. So such a construction would need to be supplied separately. However, this was not an issue for me, because I do not use the specific value of $a$ at any point. 
 
+\section{Proving ``Trivialities''}
 
+Going into the project, I expected Lean to be able to infer a lot more that it actually can. For example, if $c \mid p$, then $p$ is not primitive. Or that for any polynomial $p$, we can factor it as $ap'$, where $a$ is a constant, and $p'$ is primitive. Facts I used without justification in my human proof.  
+
+Similarly, Lean isn't particularly good at rearranging equations or dealing with homomorphisms. Tactics like ``simp'' don't always do what you want it to do. 
+
+For example, I may have something the form $\phi(a) + \phi(b + c)$, a hypothesis $a + b + c = 0$, and desire to show $\phi(a) + \phi(b+c) = 0$, where $\phi$ is an homomorphism. Using the ``simp'' tactic here, even with the hypothesis, causes Lean to expand the equation out into $\phi(a) + \phi(b) + \phi(c)$\footnote{This behaviour may not be replicated exactly. In my attempts to construct a minimal example, simp just fails to simplify. However, I have observed substantially similar behaviour in my actual proof.}
+
+``ring'' can do a lot of equation rearrangement, but it times out on my equations, because I end up having a lot of variables due to reasons mentioned above. It also cannot deal with hypotheses or homomorphisms. 
+
+Similarly, ``rewriting'' doesn't account for ring axioms by default, so if we want to show $a b c = b$, and have a hypothesis $h : a c = 1$, rewriting the target with $h$ directly leads to a pattern match failure, and we need to rewrite the target using commutativity first.
+
+This adds a lot of busy work into the proof. 
+
+\section{Choosing Definitions Carefully}
+
+Writing Lean Code involves a lot of refactoring. So it becomes important to choose your definitions carefully, because even a slight change in definitions can cause all your proofs using it to become invalid, causing you to repeat all the busywork mentioned above. 
+
+I learnt this the hard way, when I changed how I was defining a primitive polynomial. 
+
+My first definition of primitiveness was $p$ is primitive, if for all non-unit constants $c$, $p \mod c \neq 0$. 
+
+The inbuilt polynomial mod function is only defined over fields\footnote{Lean calls them ``discrete fields''. Here ``discrete'' just means that the elements have decidable equality. The standard definition of field in Lean does not have decidable equality built in.}, and for monic divisors, so I rolled my own mod function for constants. 
+
+\includegraphics{const_mod.png}
+
+Where we just $mod$ each coefficient of $p$ by $q$ individually. 
+
+Unfortunately, Lean could not figure out that $mod\_by\_const p q = 0$ equivalent to $q \mid p$, so all the divisibility lemmas in mathlib were hidden from me.
+
+My options were 
+
+\begin{itemize}
+    \item Prove that $mod\_by\_const\ p\ q = 0 \iff q \mid p$, and manually invoke this equivalence every time I needed divisibility.
+    \item Redefine primitiveness in terms of divisibility.
+\end{itemize}
+
+I chose the latter option, because the first one would make the code unnecessarily ugly. But this required that I rewrite any lemmas I had written with the old definition to work with the new one, which meant a lot of busy work. 
+
+So I should have been more careful about how I defined primitiveness, and looked at what was available in the library and take full advantage of it. 
+
+\section{Sketching out the Proof First}
+
+Because Lean involves a lot of refactoring, you end up throwing a lot of little lemmas you have written out. So it is worthwhile just specifying and ``sorry''-ing any lemma you might need, and worrying about them only after you've implemented the mathematically interesting parts. 
+
+Again, this is something I learnt the hard way. In my first attempt at the Gauss Lemma, where I defined primitiveness using \texttt{mod\_by\_const}, I started filling out any lemma that I could. So I proved properties like well foundedness of \texttt{mod\_by\_const} (i.e. the recursion in \texttt{mod\_by\_const} terminates) before I realised I couldn't access the divisibility properties with my current definition. 
+
+So when I rewrote my code, I ended up throwing away filled lemmas that I had spent time implementing. There is also a psychological factor - because I had put in so much effort with the old definition, I was reluctant to delete it. So I worked with it for longer than I should have. 
+
+This could have been avoided if I had just sorried the lemmas instead.
+
+\section{Code Bloat}
 
 \end{document}
