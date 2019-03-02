@@ -261,7 +261,7 @@ To implement the above, we first need the Primitive Polynomial Lemma, which was 
 
     This should be extremely straightforward, since $\alpha/(r)$ is an integral domain if $r$ is prime is already present in mathlib. As is $R[X]$ being an integral domain if $R$ is.
 
-    But unfortunately, just stating that $f = 0$ in $\alpha/(r)[X]$ makes the type class resolutions time out. So the core of the proof remains unimplemented.
+    But unfortunately, just stating that $f = 0$ in $\alpha/(r)[X]$ makes the code time out. This is because the Type Class Resolution cannot find an instance of \texttt{has\_zero} for $(\alpha)/(n)[X]$ \footnote{According to debug work done by Dr. Scott Morrison}. So the core of the proof remains unimplemented.
 
     \item \texttt{prod\_of\_prim\_is\_prim} : The product of two primitive polynomials is primitive. 
     
