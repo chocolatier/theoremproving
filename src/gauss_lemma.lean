@@ -254,10 +254,13 @@ begin
                                                            ... = quot_poly p * quot_poly (C (c * c₂)) : by rw ←C.is_semiring_hom.map_mul,
     have h6' : quot_poly p * quot_poly (C (c * c₂)) * C ((to_quot (c * c₂))⁻¹) = quot_poly (C c' * C c₂') * quot_poly (d' * d₂')  * C ((to_quot (c * c₂))⁻¹), by {rw [rearrange_lemma] at h6, rw h6},
     have h7  : quot_poly p = quot_poly (C c' * C c₂') * quot_poly (d' * d₂') *  C ((to_quot (c * c₂))⁻¹), by {rw [mul_assoc, can_factor_poly_helper, mul_one] at h6', exact h6'}, 
-    have h7' : quot_poly p = quot_poly (d' * d₂') * C ((to_quot (c * c₂))⁻¹) * quot_poly (C c' * C c₂'), by {rw [mul_assoc, mul_comm] at h7, exact h7}, -- ring leads to determinsitic timeout
-    have h7'': quot_poly p = quot_poly (d' * d₂') * C ((to_quot (c * c₂))⁻¹) * quot_poly (C (c' * c₂')), by {rw ←C.is_semiring_hom.map_mul at h7', exact h7'},
-    have h8  : quot_poly p = quot_poly (d' * d₂') * C ((to_quot (c * c₂))⁻¹) * C (to_quot (c' *c₂')), by {rw [quot_poly_coe] at h7'', exact h7''},
-    have h9  : quot_poly p = quot_poly (d' * d₂') * C ((to_quot (c * c₂))⁻¹ * to_quot (c' *c₂')), by {rw [mul_assoc, ←C.is_semiring_hom.map_mul] at h8, exact h8},
+    have h9 : quot_poly p = quot_poly (d' * d₂') * C ((to_quot (c * c₂))⁻¹ * to_quot (c' *c₂')), from calc 
+             quot_poly p = quot_poly (C c' * C c₂') * quot_poly (d' * d₂') *  C ((to_quot (c * c₂))⁻¹) : by exact h7
+                    ...  = quot_poly (d' * d₂') * C ((to_quot (c * c₂))⁻¹) * quot_poly (C c' * C c₂') : by rw [mul_assoc, mul_comm]
+                    ...  = quot_poly (d' * d₂') * C ((to_quot (c * c₂))⁻¹) * quot_poly (C (c' * c₂')) : by rw ←C.is_semiring_hom.map_mul
+                    ...  = quot_poly (d' * d₂') * C ((to_quot (c * c₂))⁻¹) * C (to_quot (c' *c₂')) : by rw quot_poly_coe
+                    ...  = quot_poly (d' * d₂') * C ((to_quot (c * c₂))⁻¹ * to_quot (c' *c₂')) : by rw [mul_assoc, ←C.is_semiring_hom.map_mul],
+
     let k  := (to_quot (c * c₂))⁻¹ * to_quot (c' *c₂'),
     have h_k : k = (to_quot (c * c₂))⁻¹ * to_quot (c' *c₂'), by refl,
     have h10 : quot_poly p = quot_poly (d' * d₂') * C (k), by {rw ←h_k at h9, exact h9}, 
