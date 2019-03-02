@@ -227,12 +227,15 @@ end
 
 -- coeffts in LHS all all integers, so coeffts on the right must be all integers. q is primitive, so no k divides all coeffts of q 
 -- follows that r must be an integer. Adapt Case 2 from old proof. 
-lemma prim_associate {p q : polynomial α} {r : quotient_ring α} (h : quot_poly p = C r * quot_poly q) : ∃(k : α), to_quot k = r := 
+lemma prim_associate {p q : polynomial α} {r : quotient_ring α} 
+    (h : quot_poly p = C r * quot_poly q) : ∃(k : α), to_quot k = r := 
 begin 
     sorry
 end
 
-lemma can_factor_poly (p : polynomial α) (hp: ¬is_const p) (h_nir : ¬irreducible (quot_poly p)) : ∃(d' d₂' : polynomial α), ∃(k : quotient_ring α), quot_poly p = quot_poly (d' * d₂') *  (C k) ∧ primitive d' ∧ primitive d₂' := 
+lemma can_factor_poly (p : polynomial α) (hp: ¬is_const p) (h_nir : ¬irreducible (quot_poly p)) : 
+    ∃(d' d₂' : polynomial α), ∃(k : quotient_ring α), quot_poly p = 
+        quot_poly (d' * d₂') *  (C k) ∧ primitive d' ∧ primitive d₂' := 
 begin 
     have h0 : ¬ is_unit (quot_poly p) := quot_poly_of_non_const_is_non_unit hp,
     rcases not_irred_imp_prod h_nir h0 with ⟨m, n, h_p_eq_mn, hc⟩,

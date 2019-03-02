@@ -8,6 +8,8 @@
 \usepackage{listings}
 \usepackage{graphicx} 
 \usepackage[utf8x]{inputenc}
+\usepackage{hyperref}
+
 
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\N}{\mathbb{N}}
@@ -107,6 +109,30 @@ It contains the beginnings of Algebra, Analysis, Topology, some elementary Numbe
 
 I initially wanted to do some Algebraic Number Theory, but found Galois Theory was missing entirely. So I chose to implement the Gauss Lemma, the first step towards implementing Galois Theory.\footnote{My first plan was to work all the way to the Fundamental Theorem of Galois Theory, but that $grossly$ overestimated how fast I could implement proofs in Lean.} 
 
+\subsubsection{Implementation Style in Mathlib}
+
+Generally, mathlib implements theories in the most abstract setting possible. 
+
+For example, polynomial is defined as
+
+\includegraphics{polynomial.png}
+
+Which is a function from $\N$ to the commutative semiring of coefficients $\alpha$ with a finite support (i.e. only finitely many non-zero values in the image). 
+
+  This is largely motivated by the desire for code reuse. By defining properties in the most general setting possible, we can reuse them across many instances.
+
+ For example, We know that any ordered finite set has a maximum. This property can be used wherever ordered finite sets come up. 
+        Like to argue that a polynomial has a coefficient of maximum degree. The support of polynomial is finite and has a natural order. So ordered finsets having a maximum gives us the existence of a coefficient of maximum degree automatically.
+
+
+ While an alternative implementations like lists of coefficients would require a separate proof about the fact. 
+
+
+ Similarly, it provides a uniform API between components of the library. 
+
+ However, this can make definitions non-intuitive, which can slow down the development process. 
+
+
 \section{Gauss's Lemma}
 
 Before implementing it in Lean, we recall the statement and proof the Gauss Lemma. 
@@ -182,6 +208,40 @@ if $k$ is not in $\alpha$, it's denominator (in reduced form) must divide each c
 
 
 \chapter{Implementation} 
+
+My implementation is available at \url{https://github.com/chocolatier/theoremproving}. 
+
+Note: as of commit 745d1d79e473eb48788be8ba8b3cfb6774c424a7, not all the functions I describe are present/implemented. This is because I am in the middle of a code refactor, the reasons explained later. 
+
+The implementation of the forward direction of the Gauss Lemma itself is split into three separate lemmas. 
+
+\begin{itemize}
+    \item \texttt{can\_factor\_poly}: Which states that any reducible polynomial $p$ in $Frac(\alpha)[X]$ can be written as $kd'd_2'$, where $k$ is in $Frac(\alpha)$, and $d', d_2'$ are primitive polynomials in $ \alpha[X]$. 
+    
+        \includegraphics[width=\textwidth]{can_factor_poly.png}
+
+    This largely a straightforward calculation. 
+
+    \item \texttt{prim\_associate}: If $p$ and $q$ are primitive polynomials, $r$ is in $Frac(\alpha)$, and $p = rq$, then $r$ must be an integer. 
+    
+    \includegraphics{prim_associate.png}
+
+    This was implemented as a proof by contradiction in my previous iteration, where I argued that $r$ would have to be in the form $a^{-1}$, for some $a \in \alpha$. 
+    
+    I had sorried this fact, but the human proof is that if $p = \frac{m}{n}q$, where $n$ is not a unit and $n, m$ are coprime, then $np = mq$. This is a contradiction, because the LHS and RHS have distinct coprime factors. 
+
+    And then I did a fairly longwinded deduction (full of sorries) showing that since $a \mid c_i$, for all coefficients $c_i$ of $q$, because each $a^{-1}c_i$ corresponded to some coefficient $c'_i$ of $p$, q was not primitive. 
+
+    I believe the argument I provided in the human proof above will be easier to implement in the refactor. 
+
+     \item{irred\_in\_base\_imp\_irred\_in\_quot}: The forward direction of the Gauss Lemma. 
+    
+    \includegraphics{prod_base.png}
+
+    It largely puts the above two lemmas together, and does some simple deduction to argue why a witness to reducibility constitutes an contradiction. 
+
+
+\end{itemize}
 
 \chapter{Issues}
 
