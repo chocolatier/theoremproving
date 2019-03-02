@@ -27,7 +27,7 @@
 
 \chapter{Background}
 
-I attempted to implement a proof of Gauss's Lemma in Lean over the Australian summer of 2018-2019. This report provides the background on Lean and the Gauss Lemma, and details my (yet incomplete) proof.  
+I attempted to implement a proof of Gauss's Lemma in Lean over the Australian summer of 2018-2019. This report first provides the background knowledge on Lean and the Gauss Lemma, sketches out my (yet incomplete) proof, and details the challenges I faced in getting implementing it.  
 
 \section{Lean}
 
@@ -80,11 +80,11 @@ The Calculus of Constructions that Lean implements is a form of Dependent Type T
 For example, 
 
 \begin{itemize}
-    \item $n : \N$ $n$ belongs to the type of natural numbers. 
+    \item $n : \N$ - $n$ belongs to the type of natural numbers. 
     \item $p \iff  p : Prop$ - $p \iff p$ is a proposition, which is also a type. 
 \end{itemize}
 
-This type may depend on a parameter such as 
+Types may depend on a parameter such as 
 
 \begin{itemize}
   \item $\text{list } \alpha$
@@ -95,7 +95,7 @@ We also have the notion of $\Pi$-types and $\Sigma$-types, which build new types
 
 $\Pi$ types denote the notion of a dependent function type. A function whose return type may depend on the input parameter. E.g. the function $f(a) := x + a$ that takes an $a$ in any ring $\alpha$, returns $x + a$ in $\alpha[x]$
 
-$$C :\Pi\ \alpha : \texttt{Type u}, \alpha \rightarrow \texttt{polynomial } \alpha $$
+$$C :\Pi\ (\alpha : \texttt{Type u}), \alpha \rightarrow \texttt{polynomial } \alpha $$
 
 Similarly, $\Sigma$-types denote the cartesian product, where the type for the second element is allowed to depend on the first. 
 
@@ -132,14 +132,15 @@ Which is a function from $\N$ to the commutative semiring of coefficients $\alph
 
  However, this can make definitions non-intuitive, which can slow down the development process. 
 
- It is also worth noting that by default Lean works with constructive logic that lacks the law of the excluded middle, $p \vee \neg p$. However, this can be easily worked around if we specify that we are using classical logic. 
 
-Similarly, since constructability is default, Lean also does not allow for the Axiom of Choice, unless we explicitly state that our work is non-computable. 
+ It is also worth noting that by default Lean works with constructive logic that lacks the law of the excluded middle, $p \vee \neg p$. However, this can be easily worked around if we explicitly specify that we are using classical logic. 
+
+Similarly, since constructability is default, Lean also does not allow for the Axiom of Choice - unless we explicitly state that our work is non-computable. 
 
 
 \section{Gauss's Lemma}
 
-Before implementing it in Lean, we recall the statement and proof the Gauss Lemma. 
+Before we can implement it in Lean, we must recall the statement of Gauss's Lemma, and how to prove it. 
 
 \begin{theorem}[Gauss's Lemma]
     Let $\alpha$ be a Unique Factorisation Domain. 
@@ -415,5 +416,15 @@ The code being ugly wasn't the only issue it caused. Having a long, monolithic p
 
  This was also avoidable in hindsight, by splitting out the proofs into lemmas whenever I could. 
 
+ \nopagebreak
+
+
+\chapter{Future Work}
+
+My project is far from complete, so future work primarily consists of finishing the refactor and filling out the sorries. 
+
+Once that is done, the next logical step is implementing more Galois Theory, like Eisenstein's Criterion and properties of Field Extensions and so on. 
+
+Another interesting direction to explore would be writing additional tactics and improving current ones. Proving obvious properties manually is currently the single biggest drag on writing proofs in Lean. It would be helpful if Lean could infer those details itself.
 
 \end{document}
