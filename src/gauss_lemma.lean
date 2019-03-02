@@ -232,7 +232,7 @@ begin
     sorry
 end
 
-lemma can_factor_poly (p : polynomial α) (hp: ¬is_const p) (h_nir : ¬irreducible (quot_poly p)) : ∃(d' d₂' : polynomial α), ∃(c' c₂' : α), quot_poly p = quot_poly (d' * d₂') *  C ((to_quot (c' * c₂'))⁻¹) := 
+lemma can_factor_poly (p : polynomial α) (hp: ¬is_const p) (h_nir : ¬irreducible (quot_poly p)) : ∃(d' d₂' : polynomial α), ∃(k : quotient_ring α), quot_poly p = quot_poly (d' * d₂') *  (C k) ∧ primitive d' ∧ primitive d₂' := 
 begin 
     have h0 : ¬ is_unit (quot_poly p) := quot_poly_of_non_const_is_non_unit hp,
     rcases not_irred_imp_prod h_nir h0 with ⟨m, n, h_p_eq_mn, hc⟩,
@@ -253,9 +253,17 @@ begin
                                                            ... = quot_poly p * quot_poly ((C c) * (C c₂)) : by begin rw mul_assoc, rw ←quot_poly.is_semiring_hom.map_mul end
                                                            ... = quot_poly p * quot_poly (C (c * c₂)) : by rw ←C.is_semiring_hom.map_mul,
     have h6' : quot_poly p * quot_poly (C (c * c₂)) * C ((to_quot (c * c₂))⁻¹) = quot_poly (C c' * C c₂') * quot_poly (d' * d₂')  * C ((to_quot (c * c₂))⁻¹), by {rw [rearrange_lemma] at h6, rw h6},
-    have h7  : quot_poly p = quot_poly (C c' * C c₂') * quot_poly (d' * d₂') *  C ((to_quot (c * c₂))⁻¹), by {rw [mul_assoc, can_factor_poly_helper] at h6', exact h6'}, 
-    have h7' : _ := exists.intro c₂' h7,
-    have h7'' : _ := exists.intro c' h7',
-    have h7''' : _ := exists.intro d₂' h7'',
-    apply exists.intro d' h7'''
+    have h7  : quot_poly p = quot_poly (C c' * C c₂') * quot_poly (d' * d₂') *  C ((to_quot (c * c₂))⁻¹), by {rw [mul_assoc, can_factor_poly_helper, mul_one] at h6', exact h6'}, 
+    have h7' : quot_poly p = quot_poly (d' * d₂') * C ((to_quot (c * c₂))⁻¹) * quot_poly (C c' * C c₂'), by {rw [mul_assoc, mul_comm] at h7, exact h7}, -- ring leads to determinsitic timeout
+    have h7'': quot_poly p = quot_poly (d' * d₂') * C ((to_quot (c * c₂))⁻¹) * quot_poly (C (c' * c₂')), by {rw ←C.is_semiring_hom.map_mul at h7', exact h7'},
+    have h8  : quot_poly p = quot_poly (d' * d₂') * C ((to_quot (c * c₂))⁻¹) * C (to_quot (c' *c₂')), by {rw [quot_poly_coe] at h7'', exact h7''},
+    have h9  : quot_poly p = quot_poly (d' * d₂') * C ((to_quot (c * c₂))⁻¹ * to_quot (c' *c₂')), by {rw [mul_assoc, ←C.is_semiring_hom.map_mul] at h8, exact h8},
+    let k  := (to_quot (c * c₂))⁻¹ * to_quot (c' *c₂'),
+    have h_k : k = (to_quot (c * c₂))⁻¹ * to_quot (c' *c₂'), by refl,
+    have h10 : quot_poly p = quot_poly (d' * d₂') * C (k), by {rw ←h_k at h9, exact h9}, 
+    have h11 : quot_poly p = quot_poly (d' * d₂') * C (k) ∧ primitive d' ∧ primitive d₂' := ⟨h10, primd, primd₂⟩,
+    have h12 : ∃(k : quotient_ring α), quot_poly p = quot_poly (d' * d₂') * C (k) ∧ primitive d' ∧ primitive d₂' := exists.intro k h11,
+    have h13 : _ := exists.intro d₂' h12,
+    have h14 : _ := exists.intro d' h13,
+    exact h14
 end 
