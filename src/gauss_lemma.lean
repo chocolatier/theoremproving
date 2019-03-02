@@ -42,7 +42,8 @@ end
 def const_divisor : Π (p q : polynomial α),  Prop 
 | p q := is_const q ∧ q ∣ p
 
-def primitive (p : polynomial α) : Prop := ∀(q : polynomial α), non_unit_const q → ¬const_divisor p q
+def primitive (p : polynomial α) : Prop := 
+    ∀(q : polynomial α), non_unit_const q → ¬const_divisor p q
 
 -- Subring of constant polynomials α is isomorphic to α. Manual unfolds/rws or producing an explicit divisor seem the wrong approach. 
 lemma c_div_if_div (a b : α) : a ∣ b → (C a) ∣ (C b) := sorry
@@ -84,7 +85,8 @@ end
 -- α →  α[x]
 -- ↓    ↓
 -- α(n) →α/(n)[x]
-lemma div_pq_imp_div_p_or_q {p q : polynomial α} {r: α} (hdiv : C r ∣ (p * q)) (hr : irreducible r) : C r ∣ p ∨  C r ∣ q :=
+lemma div_pq_imp_div_p_or_q {p q : polynomial α} {r: α} (hdiv : C r ∣ (p * q)) 
+    (hr : irreducible r) : C r ∣ p ∨  C r ∣ q :=
 begin 
     let I : ideal (polynomial α) := ideal.span (singleton (C r)),
     have h1 : ∀(f : polynomial α),  (C r) ∣ f ↔ ideal.quotient.mk I f = 0, by sorry,
@@ -95,7 +97,8 @@ begin
     exact h5
 end
 
-lemma prod_of_prim_is_prim (p q : polynomial α) : (primitive p ∧ primitive q) → primitive (p * q) := 
+lemma prod_of_prim_is_prim (p q : polynomial α) : 
+    (primitive p ∧ primitive q) → primitive (p * q) := 
 begin  
     intros h_p_q, 
     by_contradiction h_pq, 

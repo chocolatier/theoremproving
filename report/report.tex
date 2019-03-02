@@ -207,7 +207,7 @@ if $k$ is not in $\alpha$, it's denominator (in reduced form) must divide each c
   \end{proof}
 
 
-\chapter{Implementation} 
+\chapter{Implementation Overview} 
 
 My implementation is available at \url{https://github.com/chocolatier/theoremproving}. 
 
@@ -240,9 +240,37 @@ The implementation of the forward direction of the Gauss Lemma itself is split i
 
     It largely puts the above two lemmas together, and does some simple deduction to argue why a witness to reducibility constitutes an contradiction. 
 
+\end{itemize}
+
+
+This depended on The Primitive Polynomial Lemma, which was implemented in two parts. 
+
+\begin{itemize}
+   \item A polynomial being primitive is defined as it having no constant divisors. 
+
+   \includegraphics{def_prim.png}
+
+   \item \texttt{div\_pq\_imp\_div\_p\_or\_q}: If an irreducible $r$ in $\alpha$ divides $pq$ then it must divide $p$ or it must divide $q$. 
+
+    \includegraphics{div_pq.png}
+
+    This should be extremely straightforward, since $\alpha/(r)$ is an integral domain if $r$ is prime is already present in mathlib. As is $R[X]$ being an integral domain if $R$ is.
+
+    But unfortunately, just stating that $f = 0$ in $\alpha/(r)[X]$ makes the type class resolutions time out. So the core of the proof remains unimplemented.
+
+    \item \texttt{prod\_of\_prim\_is\_prim} : The product of two primitive polynomials is primitive. 
+    
+    \includegraphics{prod_prim.png} 
+
+    This is again the proof by contradiction mentioned in the previous section. 
 
 \end{itemize}
 
-\chapter{Issues}
+
+Each of the proofs above depend on numerous subsidiary lemmas that I wouldn't bother proving to another human, but Lean cannot infer on it's own. Such as texttt{not\_irred\_imp\_prod}: Any reducible element can be written as a product of other non-units. Each of these are also quite straightforward to implement. 
+
+While once everything is implemented, it is straightforward, getting there wasn't.  
+
+\chapter{Challenges in Implementation}
 
 \end{document}
