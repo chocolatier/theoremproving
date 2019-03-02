@@ -294,6 +294,51 @@ The little work that I did do can be found in the previously linked repo, in
 \texttt{src/gauss\_lemma\_content\_edition.lean}. 
 
 
+\section{Strict Type Checking}
+
+You may have noticed in the previous section that my textual description of the lemma and the actual Lean definition are not strictly identical. 
+
+For example, I described \texttt{can\_factor\_poly} as stating that any reducible polynomial $p$ in $Frac(\alpha)[X]$ can be written as $kd'd_2'$, where $k$ is in $Frac(\alpha)$, and $d', d_2'$ are primitive polynomials in $ \alpha[X]$. 
+
+But what I have written is for any $p$ in $\alpha[X]$, if it's canonical embedding into $Frac(\alpha)[X]$ is irreducible, then it's embedding into $Frac(\alpha)[X]$ can be written as the product of some rational $k$ and the embedding of the product of two primitive $\alpha$-polynomials $d',d_2'$. 
+
+A human mathematician will identify those two statements as being identical, but a computer does not. If $p$ is a polynomial in $\alpha[X]$, it is not a polynomial in $Frac(\alpha)[X]$. So it does not make sense to talk about $p$ factoring in $Frac(\alpha)[X]$. 
+
+Instead, we need to specify that we are talking about the image of $p$ under the canonical embedding from $\alpha[X]$ to $Frac(\alpha)[X]$. 
+
+
+\includegraphics[width=\textwidth]{gauss_fwd.png}
+  
+  Explicitly specifying that the obvious embedding of $p$ in $Frac (\alpha) [X]$ is irreducible isn't too bad. But the reverse direction isn't so nice. 
+  
+  We cannot claim that an element of $Frac\ \alpha$ is an element of $\alpha$. 2 in $\Q$ is the equivalence class of pairs $[(2,1)]$, while $2$ in $\Z$ is just $2$. 
+ 
+We can define a map $\psi : Frac\ \alpha \rightarrow \alpha$ that forgets the `1' and it being an equivalence class, but this is not possible in Lean.
+
+    Lean only has total functions, so we cannot define any \texttt{to\_base:} $Frac\ \alpha \rightarrow \alpha$ directly. 
+    
+    We may use an option type, defining 
+
+    \texttt{to\_base:} $Frac\ \alpha \rightarrow \texttt{option } \alpha$. 
+
+    An option type is a wrapper around alpha, so f(a) may be Some a or none. 
+
+
+    \includegraphics[]{option.png}
+
+    However, this would involve accounting for the possibility of \texttt{to\_base a} being none at various points in the proof. 
+
+    We may choose to define a coercion that depends on a hypothesis that somehow guarantees that the function would be well defined.   But dealing with options or carrying additional hypotheses around around would get annoying very quickly.
+
+    So I chose to account for a rational $r$ being an integer by stating 
+
+    $\exists(a : \alpha), \texttt{to\_quot } a = r$. 
+
+    i.e. there is an element $a$ in the the base field $\alpha$, such such that $r$ is equivalent to $a's$ embedding in $Frac(\alpha)$
+
+    This does have the disadvantage that I have additional variables to worry about, and can become even more convoluted than in \texttt{can\_factor\_poly}. But on the balance I thought that it would be the least annoying option to deal with. 
+
+
 
 
 \end{document}
